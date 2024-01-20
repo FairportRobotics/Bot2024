@@ -1,10 +1,21 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 public class Scoring extends SubsystemBase{
-    public void ScoringSubsystem() {}
+
+    TalonSRX Christ = new TalonSRX(17);
+    CommandPS4Controller controller;
+
+    public Scoring(CommandPS4Controller controller) {
+        this.controller = controller;
+    }
 
     /**
      * Example command factory method.
@@ -35,7 +46,7 @@ public class Scoring extends SubsystemBase{
     @Override
     public void periodic() 
     {
-        // This method will be called once per scheduler run
+        Christ.set(ControlMode.PercentOutput, controller.getLeftY()); 
     }
 
     @Override
