@@ -4,16 +4,20 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.IntakeSubsystem;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-public class IntakeSubsystem extends IntakeSubsystem {
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class IntakeSubsystem extends SubsystemBase {
+    TalonSRX jesus = new TalonSRX(2);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {}
 
   /**
    * Example command factory method.
-   *
+   * 
    * @return a command
    */
   public Command exampleMethodCommand() {
@@ -35,8 +39,21 @@ public class IntakeSubsystem extends IntakeSubsystem {
     return false;
   }
 
+  public Command suck(double suckforce)
+  {
+    return new Command()
+    {
+      @Override
+      public void execute()
+      {
+        jesus.set(ControlMode.PercentOutput, suckforce);
+      }
+    };
+  }
+
   @Override
   public void periodic() {
+    jesus.set(ControlMode.PercentOutput, 1.0);
     // This method will be called once per scheduler run
   }
 
