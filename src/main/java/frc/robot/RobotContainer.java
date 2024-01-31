@@ -54,7 +54,7 @@ public class RobotContainer {
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(
       OperatorConstants.kDriverControllerPort);
 
-  private final Scoring Score = new Scoring(m_driverController);
+  private final Scoring Score = new Scoring();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -90,6 +90,14 @@ public class RobotContainer {
     joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
     joystick.b().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+
+    // here for Scoring subsystem :)
+    joystick.x().whileTrue(Score.upElevator(0.5)); 
+    joystick.b().whileTrue(Score.downElevator(0.5));
+    joystick.a().whileTrue(Score.feederUp(5));
+    joystick.y().whileTrue(Score.feederDown(5));
+    joystick.leftBumper().whileTrue(Score.Shootable(20));//change if too low
+    // here for Scoring subsystem :)
 
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));

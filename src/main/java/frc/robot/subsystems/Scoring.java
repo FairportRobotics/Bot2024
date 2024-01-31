@@ -1,57 +1,117 @@
 package frc.robot.subsystems;
 
+import java.io.Serial;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
-public class Scoring extends SubsystemBase{
+public class Scoring extends SubsystemBase {
 
-    TalonSRX Christ = new TalonSRX(17);
-    CommandPS4Controller controller;
+    TalonSRX testMoter = new TalonSRX(17);
 
-    public Scoring(CommandPS4Controller controller) {
-        this.controller = controller;
+    TalonFX upMotor = new TalonFX(0);   //Device Id's need to be changed
+    TalonFX downMotor = new TalonFX(1);
+    TalonFX elevator = new TalonFX(2);
+    TalonFX Shoot = new TalonFX(3);
+
+    // AnalogPotentiometer pot = new AnalogPotentiometer(new AnalogInput(0), 2, -1);
+
+    public Scoring() {
     }
 
-    /**
-     * Example command factory method.
-     *
-     * @return a command
-     */
-    public Command ScoringMethodCommand() 
-    {
+    public Command ScoringMethodCommand() {
         // Inline construction of command goes here.
-        // Subsystem::RunOnce implicitly requires `this` subsystem.
         return runOnce(
-            () -> {
-            /* one-time action goes here */
-            });
+                () -> {
+                    /* one-time action goes here */
+                });
     }
-
-    /**
-     * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-     *
-     * @return value of some boolean subsystem state, such as a digital sensor.
-     */
-    public boolean ScoringCondition() 
-    {
+    
+    public boolean ScoringCondition() {
         // Query some boolean state, such as a digital sensor.
         return false;
     }
 
-    @Override
-    public void periodic() 
+    //ELEVATOR
+    public Command upElevator(double speed) 
     {
-        Christ.set(ControlMode.PercentOutput, controller.getLeftY()); 
+        return new Command() 
+        {
+            @Override
+            public void execute() 
+            {
+                elevator.set(speed);
+            }
+        };
+    }
+    public Command downElevator(double speed) 
+    {
+        return new Command() 
+        {
+            @Override
+            public void execute() 
+            {
+                elevator.set(speed - 1);
+            }
+        };
     }
 
-    @Override
-    public void simulationPeriodic() 
+    //FEEDER
+    public Command feederUp(double speedOfElevator)
     {
-        // This method will be called once per scheduler run during simulation
+        return new Command() 
+        {
+            @Override
+            public void execute()
+            {
+                upMotor.set(speedOfElevator);
+            }
+        };
+    }
+    public Command feederDown(double speedOfElevator)
+    {
+        return new Command() 
+        {
+            @Override
+            public void execute()
+            {
+                downMotor.set(speedOfElevator - 10);
+            }
+        };
+    }
+
+    //SHOOTER
+    public Command Shootable(double shootforce)
+    {
+        return new Command() 
+        {
+            @Override
+            public void execute()
+            {
+                Shoot.set(shootforce);
+            }
+        };
+    }
+    public Command noShoot(double shootforce)
+    {
+        return new Command() {
+            @Override
+            public void execute()
+            {
+                Shoot.set(shootforce - shootforce);
+            }
+        };
     }
 }
