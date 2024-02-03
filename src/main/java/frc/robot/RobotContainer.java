@@ -92,11 +92,8 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
     // here for Scoring subsystem :)
-    joystick.x().whileTrue(Score.upElevator(0.5)); 
-    joystick.b().whileTrue(Score.downElevator(0.5));
-    joystick.a().whileTrue(Score.feederUp(5));
-    joystick.y().whileTrue(Score.feederDown(5));
-    joystick.leftBumper().whileTrue(Score.Shootable(20));//change if too low
+    joystick.rightBumper().whileTrue(Score.Shootable(2));//change if too low
+    joystick.leftBumper().whileTrue(Score.keep(2));//change if too low
     // here for Scoring subsystem :)
 
     // reset the field-centric heading on left bumper press

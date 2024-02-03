@@ -19,13 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 public class Scoring extends SubsystemBase {
 
-    TalonSRX testMoter = new TalonSRX(17);
-
-    TalonFX upMotor = new TalonFX(0);   //Device Id's need to be changed
-    TalonFX downMotor = new TalonFX(1);
-    TalonFX elevator = new TalonFX(2);
     TalonFX Shoot = new TalonFX(3);
 
+    //TalonSRX testMoter = new TalonSRX(17);
     // AnalogPotentiometer pot = new AnalogPotentiometer(new AnalogInput(0), 2, -1);
 
     public Scoring() {
@@ -44,54 +40,6 @@ public class Scoring extends SubsystemBase {
         return false;
     }
 
-    //ELEVATOR
-    public Command upElevator(double speed) 
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute() 
-            {
-                elevator.set(speed);
-            }
-        };
-    }
-    public Command downElevator(double speed) 
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute() 
-            {
-                elevator.set(speed - 1);
-            }
-        };
-    }
-
-    //FEEDER
-    public Command feederUp(double speedOfElevator)
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute()
-            {
-                upMotor.set(speedOfElevator);
-            }
-        };
-    }
-    public Command feederDown(double speedOfElevator)
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute()
-            {
-                downMotor.set(speedOfElevator - 10);
-            }
-        };
-    }
-
     //SHOOTER
     public Command Shootable(double shootforce)
     {
@@ -104,7 +52,7 @@ public class Scoring extends SubsystemBase {
             }
         };
     }
-    public Command noShoot(double shootforce)
+    public Command keep(double shootforce)
     {
         return new Command() {
             @Override
