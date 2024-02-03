@@ -12,11 +12,15 @@ import frc.robot.subsystems.ExampleSubsystem;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Scoring;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,9 +63,38 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
-    // Configure the trigger bindings
+  public RobotContainer() 
+  {
+    
+    final Field2d field;
+
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
+
+    // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+         // Do whatever you want with the pose here
+        field.setRobotPose(pose);
+    });
+
+        // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            // Do whatever you want with the pose here
+        field.getObject("target pose").setPose(pose);
+    });
+
+        // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+            // Do whatever you want with the poses here
+        field.getObject("path").setPoses(poses);
+    });
+
+    Scoring score = new Scoring(); // Subsystem initialization
+
+    NamedCommands.registerCommand("Shoot", score.Shootable(2));// Register Named Commands
+
     configureBindings();
+    
   }
 
   /**
@@ -92,8 +125,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
     // here for Scoring subsystem :)
-    joystick.rightBumper().whileTrue(Score.Shootable(2));//change if too low
-    joystick.leftBumper().whileTrue(Score.keep(2));//change if too low
+    joystick.rightBumper().whileTrue(Score.Shootable(2));// change if too low
     // here for Scoring subsystem :)
 
     // reset the field-centric heading on left bumper press
