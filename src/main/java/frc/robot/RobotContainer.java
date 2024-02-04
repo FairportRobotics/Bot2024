@@ -9,6 +9,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -59,6 +60,7 @@ public class RobotContainer {
       OperatorConstants.kDriverControllerPort);
 
   private final Scoring Score = new Scoring();
+  private final IntakeSubsystem Intake = new IntakeSubsystem();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -126,7 +128,9 @@ public class RobotContainer {
 
     // here for Scoring subsystem :)
     joystick.rightBumper().whileTrue(Score.Shootable(2));// change if too low
-    // here for Scoring subsystem :)
+    // here for intake subsystem :)
+    joystick.x().whileTrue(Intake.intakeOn(1)); 
+    joystick.x().whileTrue(Intake.intakeOn(0)); 
 
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
