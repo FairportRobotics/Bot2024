@@ -21,10 +21,10 @@ public class Scoring extends SubsystemBase {
 
     TalonSRX testMoter = new TalonSRX(17);
 
-    TalonFX upMotor = new TalonFX(0);   //Device Id's need to be changed
-    TalonFX downMotor = new TalonFX(1);
-    TalonFX elevator = new TalonFX(2);
-    TalonFX Shoot = new TalonFX(3);
+    TalonFX upMotor = new TalonFX(30);   //Device Id's need to be changed
+    TalonFX downMotor = new TalonFX(31);
+    TalonFX elevator = new TalonFX(32);
+    TalonFX Shoot = new TalonFX(33);
 
     // AnalogPotentiometer pot = new AnalogPotentiometer(new AnalogInput(0), 2, -1);
 
