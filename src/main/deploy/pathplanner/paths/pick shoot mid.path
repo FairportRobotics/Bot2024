@@ -8,52 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.45,
-        "y": 7.198480818525495
+        "x": 2.45,
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.45,
-        "y": 7.0
-      },
-      "prevControl": {
-        "x": 1.4,
-        "y": 7.0
-      },
-      "nextControl": {
-        "x": 2.9983144068881415,
-        "y": 7.0
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.890235494756704,
-        "y": 7.0
-      },
-      "prevControl": {
-        "x": 2.920202889469538,
-        "y": 7.020983395678432
-      },
-      "nextControl": {
-        "x": 2.644489881470009,
-        "y": 6.827927069094688
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.45,
+        "x": 2.8,
         "y": 5.55
       },
       "prevControl": {
-        "x": 2.9207178298036194,
-        "y": 7.020717829803619
+        "x": 1.7999999999999998,
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Pick",
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -82,7 +50,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 3.0,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
