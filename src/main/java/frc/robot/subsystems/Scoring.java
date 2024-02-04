@@ -26,6 +26,7 @@ public class Scoring extends SubsystemBase {
     TalonFX elevator = new TalonFX(32);
     TalonFX Shoot = new TalonFX(33);
 
+    // TalonSRX testMoter = new TalonSRX(17);
     // AnalogPotentiometer pot = new AnalogPotentiometer(new AnalogInput(0), 2, -1);
 
     public Scoring() {
@@ -38,79 +39,18 @@ public class Scoring extends SubsystemBase {
                     /* one-time action goes here */
                 });
     }
-    
+
     public boolean ScoringCondition() {
         // Query some boolean state, such as a digital sensor.
         return false;
     }
 
-    //ELEVATOR
-    public Command upElevator(double speed) 
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute() 
-            {
-                elevator.set(speed);
-            }
-        };
-    }
-    public Command downElevator(double speed) 
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute() 
-            {
-                elevator.set(speed - 1);
-            }
-        };
-    }
-
-    //FEEDER
-    public Command feederUp(double speedOfElevator)
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute()
-            {
-                upMotor.set(speedOfElevator);
-            }
-        };
-    }
-    public Command feederDown(double speedOfElevator)
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute()
-            {
-                downMotor.set(speedOfElevator - 10);
-            }
-        };
-    }
-
-    //SHOOTER
-    public Command Shootable(double shootforce)
-    {
-        return new Command() 
-        {
-            @Override
-            public void execute()
-            {
-                Shoot.set(shootforce);
-            }
-        };
-    }
-    public Command noShoot(double shootforce)
-    {
+    // SHOOTER
+    public Command Shootable(double shootforce) {
         return new Command() {
             @Override
-            public void execute()
-            {
-                Shoot.set(shootforce - shootforce);
+            public void execute() {
+                Shoot.set(shootforce);
             }
         };
     }
