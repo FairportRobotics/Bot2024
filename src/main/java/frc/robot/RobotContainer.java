@@ -67,9 +67,8 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() 
-  {
-    
+  public RobotContainer() {
+
     final Field2d field;
 
     field = new Field2d();
@@ -77,20 +76,20 @@ public class RobotContainer {
 
     // Logging callback for current robot pose
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-         // Do whatever you want with the pose here
-        field.setRobotPose(pose);
+      // Do whatever you want with the pose here
+      field.setRobotPose(pose);
     });
 
-        // Logging callback for target robot pose
+    // Logging callback for target robot pose
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-        field.getObject("target pose").setPose(pose);
+      // Do whatever you want with the pose here
+      field.getObject("target pose").setPose(pose);
     });
 
-        // Logging callback for the active path, this is sent as a list of poses
+    // Logging callback for the active path, this is sent as a list of poses
     PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-        field.getObject("path").setPoses(poses);
+      // Do whatever you want with the poses here
+      field.getObject("path").setPoses(poses);
     });
 
     Scoring score = new Scoring(); // Subsystem initialization
@@ -98,7 +97,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot", score.Shootable(2));// Register Named Commands
 
     configureBindings();
-    
+
   }
 
   /**
@@ -129,10 +128,13 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
     // here for Scoring subsystem :)
-    joystick.rightBumper().whileTrue(Score.Shootable(2));// change if too low
+    joystick.rightBumper().whileTrue(Score.Shootable(2));// change if too low or high
+    joystick.x().whileTrue(Score.elevatorUp());
+    joystick.y().whileTrue(Score.elevatorDown());
     // here for intake subsystem :)
-    joystick.x().whileTrue(Intake.intakeOn(1)); 
-    joystick.x().whileTrue(Intake.intakeOn(0)); 
+    joystick.a().whileTrue(Intake.intakeOn(1));
+    joystick.b().whileTrue(Intake.intakeOff(0));
+    // Mason is a poopy head he he he....
 
     joystick.leftBumper().whileTrue(climb.climbUp(1)); 
     joystick.rightBumper().whileTrue(climb.climbDown(-1)); 
