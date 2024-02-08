@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "pick shoot bottom"
@@ -30,9 +36,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
           }
         },
         {
@@ -48,6 +66,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
@@ -57,6 +81,12 @@
           "type": "path",
           "data": {
             "pathName": "Copy of New New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
           }
         },
         {
