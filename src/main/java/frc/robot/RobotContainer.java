@@ -90,9 +90,7 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-    Scoring score = new Scoring(); // Subsystem initialization
-
-    NamedCommands.registerCommand("Shoot", score.Shootable(2));// Register Named Commands
+    NamedCommands.registerCommand("Shoot", Score.Shootable(2));// Register Named Commands
 
     configureBindings();
 
