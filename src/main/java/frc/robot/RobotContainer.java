@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -61,6 +62,7 @@ public class RobotContainer {
 
   private final Scoring Score = new Scoring();
   private final IntakeSubsystem Intake = new IntakeSubsystem();
+  private final Drive climb = new Drive();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -131,6 +133,9 @@ public class RobotContainer {
     joystick.a().whileTrue(Intake.intakeOn(1));
     joystick.b().whileTrue(Intake.intakeOff(0));
     // Mason is a poopy head he he he....
+
+    joystick.leftBumper().whileTrue(climb.climbUp(1)); 
+    joystick.rightBumper().whileTrue(climb.climbDown(-1)); 
 
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
