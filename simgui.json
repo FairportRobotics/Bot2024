@@ -19,6 +19,16 @@
       "/SmartDashboard/Module 3": "Mechanism2d"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "PathPlanner": {
+        "HotReload": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
     "visible": true
   }
