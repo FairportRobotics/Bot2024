@@ -98,6 +98,7 @@ public class Scoring extends SubsystemBase {
         };
     }
 
+    //Elevator limit switches
     public void setMotorSpeed(double speed) {
         if (speed > 0) {
             if (toplimitSwitch.get()) {
