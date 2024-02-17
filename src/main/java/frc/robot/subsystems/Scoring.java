@@ -4,6 +4,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -12,11 +14,17 @@ public class Scoring extends SubsystemBase {
 
     TalonFX Shoot = new TalonFX(33);
     TalonFX elevator = new TalonFX(17);
+    boolean climbTop = false;
+    boolean climbBottom = false;
+    DigitalInput toplimitSwitch;
+    DigitalInput bottomlimitSwitch;
 
     // TalonSRX testMoter = new TalonSRX(17);
     // AnalogPotentiometer pot = new AnalogPotentiometer(new AnalogInput(0), 2, -1);
 
     public Scoring() {
+        toplimitSwitch = new DigitalInput(8);
+        bottomlimitSwitch = new DigitalInput(9);
     }
 
     public Command ScoringMethodCommand() {
@@ -41,6 +49,7 @@ public class Scoring extends SubsystemBase {
             }
         };
     }
+
     // Elevator
     public Command elevatorUp() {
         return new Command() {
@@ -53,12 +62,15 @@ public class Scoring extends SubsystemBase {
             public void end(boolean interrupted) {
                 elevator.set(0);
             }
+
             @Override
             public boolean isFinished() {
-                return true;
+                climbTop = true;
+                return climbTop;
             }
         };
     }
+
     public Command elevatorDown() {
         return new Command() {
             @Override
@@ -70,9 +82,27 @@ public class Scoring extends SubsystemBase {
             public void end(boolean interrupted) {
                 elevator.set(0);
             }
+
             public boolean isFinished() {
+                climbBottom = true;
                 return false;
             }
         };
+    }
+
+    public void setMotorSpeed(double speed) {
+        if (speed > 0) {
+            if (toplimitSwitch.get()) {
+                elevator.set(0);
+            } else {
+                elevator.set(speed);
+            }
+        } else {
+            if (bottomlimitSwitch.get()) {
+                elevator.set(0);
+            } else {
+                elevator.set(speed);
+            }
+        }
     }
 }
