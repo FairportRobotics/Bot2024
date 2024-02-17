@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5311346007307416,
-      "y": 5.791895429944707
+      "x": 1.7824530941501242,
+      "y": 5.410406484151056
     },
     "rotation": 0
   },
@@ -18,19 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "To note(middle)"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "score(go back)"
+                  "pathName": "ToAmpAndSpeaker"
                 }
               }
             ]

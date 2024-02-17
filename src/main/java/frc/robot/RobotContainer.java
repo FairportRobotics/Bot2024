@@ -15,6 +15,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
@@ -92,7 +93,7 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-    NamedCommands.registerCommand("Shoot", Score.Shootable(2));// Register Named Commands
+    NamedCommands.registerCommand("Shoot", Score.Shoot(2));// Register Named Commands
 
     configureBindings();
 
@@ -125,17 +126,18 @@ public class RobotContainer {
     joystick.b().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
-    // here for Scoring subsystem :)
-    joystick.rightBumper().whileTrue(Score.Shootable(2));// change if too low or high
-    joystick.x().whileTrue(Score.elevatorUp());
-    joystick.y().whileTrue(Score.elevatorDown());
+    // here for Scoring subsystem :) // change if too low or high
+    joystick.rightBumper().whileTrue(Score.Shoot(2));
+    joystick.rightTrigger().whileTrue(Score.elevatorUp());
+    joystick.leftTrigger().whileTrue(Score.elevatorDown()); 
+    joystick.x().onTrue(CommandSwerveDrivetrain.followPathToSpeaker(getAutonomousCommand()));//followPathToAmpSpeaker
+    joystick.y().onTrue(CommandSwerveDrivetrain.followPathToAmp(getAutonomousCommand()));//followPathToAmp
     // here for intake subsystem :)
     joystick.a().whileTrue(Intake.intakeOn(1));
     joystick.b().whileTrue(Intake.intakeOff(0));
-    // Mason is a poopy head he he he....
-
-    joystick.leftBumper().whileTrue(climb.climbUp(1)); 
-    joystick.rightBumper().whileTrue(climb.climbDown(-1)); 
+    //Climer
+    joystick.leftBumper().whileTrue(climb.climbUp(1));
+    joystick.rightBumper().whileTrue(climb.climbDown(-1));
 
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
