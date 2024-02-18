@@ -7,12 +7,12 @@ package frc.robot.commands;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
+/** An intake command that uses an intake subsystem. */
 public class IntakeCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new IntakeCommand.
    *
    * @param subsystem The subsystem used by this command.
    */

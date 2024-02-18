@@ -4,19 +4,19 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
+/** Command to raise the climber hooks */
 public class ClimberUp extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new ClimberUp Command.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ClimberUp(ExampleSubsystem subsystem) {
+  public ClimberUp(ClimberSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
