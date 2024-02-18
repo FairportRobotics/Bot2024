@@ -28,10 +28,11 @@ public class LightingSubsystem extends SubsystemBase {
                     lightingController = null;
                 }
             }
-        }  
+        }
     }
-    
-    //Color rgb values have to be a multiple of 5 otherwise the arduino will never get the color correct
+
+    // Color rgb values have to be a multiple of 5 otherwise the arduino will never
+    // get the color correct
     public void setCubeColor() {
         if (lightingController != null) {
             this.lightingController.fillAll("155060180");
@@ -65,15 +66,16 @@ public class LightingSubsystem extends SubsystemBase {
             this.lightingController.shiftWrap();
         }
     }
+
     public String getColor() {
         return currentColor;
     }
 
-    public ArduinoLightingController getLightingController(){
+    public ArduinoLightingController getLightingController() {
         return lightingController;
     }
 
-    public void off(){
+    public void off() {
         if (lightingController != null)
             this.lightingController.fillAll("000000000");
     }
