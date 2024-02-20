@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
-    TalonFX cmb1 = new TalonFX(180);
+    TalonFX cmb1 = new TalonFX(180); //change lol
     TalonFX cmb2 = new TalonFX(94);
     TalonFX cmb3 = new TalonFX(24330);
 
