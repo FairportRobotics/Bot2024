@@ -5,15 +5,14 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
-public class Scoring extends SubsystemBase {
+public class ScoringSubsystem extends SubsystemBase {
 
     TalonFX Shoot = new TalonFX(33);
     TalonFX elevator = new TalonFX(17);
     DigitalInput toplimitSwitch;
     DigitalInput bottomlimitSwitch;
 
-    public Scoring() {
+    public ScoringSubsystem() {
         toplimitSwitch = new DigitalInput(8);
         bottomlimitSwitch = new DigitalInput(9);
     }

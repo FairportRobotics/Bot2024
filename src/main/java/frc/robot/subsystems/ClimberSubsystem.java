@@ -9,18 +9,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drive extends SubsystemBase {
-  TalonFX cmb1 = new TalonFX(180);
+public class ClimberSubsystem extends SubsystemBase {
+    TalonFX cmb1 = new TalonFX(180);
     TalonFX cmb2 = new TalonFX(94);
     TalonFX cmb3 = new TalonFX(24330);
 
-  public Command climbUp(double climbSpeed) 
-    {
-        return new Command() 
-        {
+    public Command climbUp(double climbSpeed) {
+        return new Command() {
             @Override
-            public void execute() 
-            {
+            public void execute() {
                 cmb1.set(climbSpeed);
                 cmb2.set(climbSpeed);
                 cmb3.set(climbSpeed);
@@ -28,14 +25,10 @@ public class Drive extends SubsystemBase {
         };
     }
 
-      //To turn on intake
-  public Command climbDown(double climbSpeed) 
-    {
-        return new Command() 
-        {
+    public Command climbDown(double climbSpeed) {
+        return new Command() {
             @Override
-            public void execute() 
-            {
+            public void execute() {
                 cmb1.set(climbSpeed);
                 cmb2.set(climbSpeed);
                 cmb3.set(climbSpeed);

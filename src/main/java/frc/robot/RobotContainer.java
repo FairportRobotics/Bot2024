@@ -8,14 +8,13 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
@@ -24,7 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Scoring;
+import frc.robot.subsystems.ScoringSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
@@ -61,9 +60,9 @@ public class RobotContainer {
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(
       OperatorConstants.kDriverControllerPort);
 
-  private final Scoring Score = new Scoring();
+  private final ScoringSubsystem Score = new ScoringSubsystem();
   private final IntakeSubsystem Intake = new IntakeSubsystem();
-  private final Drive climb = new Drive();
+  private final ClimberSubsystem climb = new ClimberSubsystem();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -129,13 +128,13 @@ public class RobotContainer {
     // here for Scoring subsystem :) // change if too low or high
     joystick.rightBumper().whileTrue(Score.Shoot(2));
     joystick.rightTrigger().whileTrue(Score.elevatorUp());
-    joystick.leftTrigger().whileTrue(Score.elevatorDown()); 
-    joystick.x().onTrue(CommandSwerveDrivetrain.followPathToSpeaker(getAutonomousCommand()));//followPathToAmpSpeaker
-    joystick.y().onTrue(CommandSwerveDrivetrain.followPathToAmp(getAutonomousCommand()));//followPathToAmp
+    joystick.leftTrigger().whileTrue(Score.elevatorDown());
+    joystick.x().onTrue(CommandSwerveDrivetrain.followPathToSpeaker(getAutonomousCommand()));// followPathToAmpSpeaker
+    joystick.y().onTrue(CommandSwerveDrivetrain.followPathToAmp(getAutonomousCommand()));// followPathToAmp
     // here for intake subsystem :)
     joystick.a().whileTrue(Intake.intakeOn(1));
     joystick.b().whileTrue(Intake.intakeOff(0));
-    //Climer
+    // Climer
     joystick.leftBumper().whileTrue(climb.climbUp(1));
     joystick.rightBumper().whileTrue(climb.climbDown(-1));
 
