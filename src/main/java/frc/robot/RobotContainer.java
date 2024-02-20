@@ -47,7 +47,8 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
+  private final CommandXboxController operator = new CommandXboxController(0); // operator SHOULD BE ON 1 BUT CONFLICTS IN SIM
+  private final CommandXboxController driver = new CommandXboxController(0); // driver
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
@@ -114,32 +115,35 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> drive.withVelocityX(-operator.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(-operator.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-operator.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.b().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+        operator.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        operator.b().whileTrue(drivetrain
+        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-operator.getLeftY(), -operator.getLeftX()))));
 
-    // here for Scoring subsystem :) // change if too low or high
-    joystick.rightBumper().whileTrue(Score.Shoot(2));
-    joystick.rightTrigger().whileTrue(Score.elevatorUp());
-    joystick.leftTrigger().whileTrue(Score.elevatorDown());
-    joystick.x().onTrue(CommandSwerveDrivetrain.followPathToSpeaker(getAutonomousCommand()));// followPathToAmpSpeaker
-    joystick.y().onTrue(CommandSwerveDrivetrain.followPathToAmp(getAutonomousCommand()));// followPathToAmp
+    // here for Scoring subsystem :) change if too low or high
+    operator.rightBumper().whileTrue(Score.Shoot(1));
+    operator.rightTrigger().whileTrue(Score.elevatorUp());
+    operator.leftTrigger().whileTrue(Score.elevatorDown());
+    driver.x().onTrue(CommandSwerveDrivetrain.fastestAutoCommand(getAutonomousCommand()));  // "Fastest" auto
+    driver.y().onTrue(CommandSwerveDrivetrain.autoAutoCommand(getAutonomousCommand())); // "Auto" auto
+    //driver.x().onTrue(CommandSwerveDrivetrain.randomAutoCommand(getAutonomousCommand())); // "random" auto
+    //driver.y().onTrue(CommandSwerveDrivetrain.fiveNoteAuto(getAutonomousCommand()));  // "five note" auto
     // here for intake subsystem :)
-    joystick.a().whileTrue(Intake.intakeOn(1));
-    joystick.b().whileTrue(Intake.intakeOff(0));
+    operator.a().whileTrue(Intake.intakeOn(1));
+    operator.b().whileTrue(Intake.intakeOff(0));
     // Climer
-    joystick.leftBumper().whileTrue(climb.climbUp(1));
-    joystick.rightBumper().whileTrue(climb.climbDown(-1));
+    operator.leftBumper().whileTrue(climb.climbUp(1));
+    operator.rightBumper().whileTrue(climb.climbDown(-1));
 
     // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    operator.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -165,5 +169,4 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
-
 }

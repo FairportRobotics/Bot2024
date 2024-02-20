@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +14,9 @@ public class IntakeSubsystem extends SubsystemBase {
     TalonFX int1 = new TalonFX(190);
     TalonFX int2 = new TalonFX(100);
     TalonFX int3 = new TalonFX(20);
+
+    TalonSRX newSrx = new TalonSRX(40);
+    TalonSRX newSrx1 = new TalonSRX(173);
 
     public IntakeSubsystem() {
     }
