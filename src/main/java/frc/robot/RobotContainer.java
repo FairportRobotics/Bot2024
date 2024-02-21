@@ -62,6 +62,9 @@ public class RobotContainer {
   private final IntakeSubsystem Intake = new IntakeSubsystem();
   private final ClimberSubsystem climb = new ClimberSubsystem();
 
+  private final Command intakeOn = Intake.intakeOn(0.5);
+  private final Command intakeOff = Intake.intakeOff();
+
   private final SendableChooser<String> bindingChooser = new SendableChooser<String>();
 
   /**
@@ -119,24 +122,24 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    if (bindingChooser.getSelected() == "System Check" && !DriverStation.isFMSAttached()) {
-
+    //if (bindingChooser.getSelected() == "System Check" && !DriverStation.isFMSAttached()) {
+      if(true){
       // SYSTEM CHECK BINDINGS
 
       // here for Scoring subsystem :) change if too low or high
-      operator.rightBumper().whileTrue(Score.Shoot(0.5));
-      operator.rightTrigger().whileTrue(Score.elevatorUp(0.5));
-      operator.leftTrigger().whileTrue(Score.elevatorDown(-0.5));
+      //operator.rightBumper().whileTrue(Score.Shoot(0.5));
+      operator.leftTrigger().onTrue(intakeOn);
+      operator.rightTrigger().onTrue(intakeOff);
       // here for intake subsystem :)
-      operator.leftBumper().whileTrue(Intake.intakeOn(0.5));
-      operator.b().whileTrue(Intake.intakeOff());
+      operator.leftBumper().onTrue(Intake.feederOn(0.1));
+      operator.rightBumper().onTrue(Intake.feederOff());
       // Climer
-      operator.x().whileTrue(climb.climbUp(1));
-      operator.y().whileTrue(climb.climbDown(-1));
+      //operator.x().whileTrue(climb.climbUp(1));
+      //operator.y().whileTrue(climb.climbDown(-1));
       // driver.x().onTrue(CommandSwerveDrivetrain.randomAutoCommand(getAutonomousCommand())); //path
 
       // reset the field-centric heading on left bumper press
-      operator.x().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
+      //operator.x().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
     } else {
       // NORMAL DRIVE MODE BINDINGS
       

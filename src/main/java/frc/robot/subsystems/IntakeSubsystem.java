@@ -31,6 +31,11 @@ public class IntakeSubsystem extends SubsystemBase {
                 intakeLeftMotor.set(ControlMode.PercentOutput, intakeSpeed);
                 intakeRightMotor.set(ControlMode.PercentOutput, intakeSpeed);
             }
+
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
         };
     }
 
@@ -42,6 +47,11 @@ public class IntakeSubsystem extends SubsystemBase {
                 intakeLeftMotor.set(ControlMode.PercentOutput, 0.0);
                 intakeRightMotor.set(ControlMode.PercentOutput, 0.0);
             }
+
+             @Override
+             public boolean isFinished() {
+                return true;
+             }
         };
     }
 

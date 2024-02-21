@@ -39,7 +39,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int INTAKE_LEFT_MOTOR_ID = 10;
+    public static final int INTAKE_LEFT_MOTOR_ID = 14;
     public static final int INTAKE_RIGHT_MOTOR_ID = 23;
 
     public static final int FEEDER_MOTOR_ID = 3;
