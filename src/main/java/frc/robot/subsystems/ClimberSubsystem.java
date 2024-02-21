@@ -8,19 +8,23 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-    TalonFX cmb1 = new TalonFX(180); //change lol
-    TalonFX cmb2 = new TalonFX(94);
-    TalonFX cmb3 = new TalonFX(24330);
+    TalonFX climberLeftMotor = new TalonFX(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID); //change lol
+    TalonFX climberRightMotor = new TalonFX(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID);
+
+    public ClimberSubsystem(){
+        climberLeftMotor.setInverted(false);
+        climberRightMotor.setInverted(true);
+    }
 
     public Command climbUp(double climbSpeed) {
         return new Command() {
             @Override
             public void execute() {
-                cmb1.set(climbSpeed);
-                cmb2.set(climbSpeed);
-                cmb3.set(climbSpeed);
+                climberLeftMotor.set(climbSpeed);
+                climberRightMotor.set(climbSpeed);
             }
         };
     }
@@ -29,9 +33,8 @@ public class ClimberSubsystem extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                cmb1.set(climbSpeed);
-                cmb2.set(climbSpeed);
-                cmb3.set(climbSpeed);
+                climberLeftMotor.set(climbSpeed);
+                climberRightMotor.set(climbSpeed);
             }
         };
     }

@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -41,6 +42,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        getPigeon2().getConfigurator().apply(new MountPoseConfigs(){
+
+        });
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
@@ -114,7 +119,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    public static Command followPathToSpeaker(Command autonomousCommand) { //PATHS NOT AUTOS
+    public static Command followPathToSpeaker() { //PATHS NOT AUTOS
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile("ToAmp");
 
@@ -133,7 +138,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         );
         return pathfindingCommand;
     }
-    public static Command followPathToAmp(Command autonomousCommand) { //PATHS NOT AUTOS
+    public static Command followPathToAmp() { //PATHS NOT AUTOS
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile("ToSpeaker");
 
@@ -153,16 +158,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return pathfindingCommand;
     }
 
-    public static Command fastestAutoCommand(Command autonomousCommand) {
+    public static Command fastestAutoCommand() {
         return new PathPlannerAuto("Fastest");
     }
-    public static Command autoAutoCommand(Command autonomousCommand) {
+    public static Command autoAutoCommand() {
         return new PathPlannerAuto("Auto");
     }
-    public static Command randomAutoCommand(Command autonomousCommand) { //commented out
+    public static Command randomAutoCommand() { //commented out
         return new PathPlannerAuto("Random auto");
     }
-    public static Command fiveNoteAuto(Command autonomousCommand) { //commented out
+    public static Command fiveNoteAuto() { //commented out
         return new PathPlannerAuto("5 note auto");
     }
 }

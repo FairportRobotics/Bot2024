@@ -19,6 +19,7 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatiorControllerPort = 1;
   }
 
   public static class AdvantageKitConstants {
@@ -30,4 +31,31 @@ public final class Constants {
 
     public static final RobotType CURRENT_MODE = RobotType.REAL;
   }
+
+
+  public static class ShooterContants{
+    public static final int SHOOTER_LEFT_MOTOR_ID = 58;
+    public static final int SHOOTER_RIGHT_MOTOR_ID = 4;
+  }
+
+  public static class IntakeConstants {
+    public static final int INTAKE_LEFT_MOTOR_ID = 10;
+    public static final int INTAKE_RIGHT_MOTOR_ID = 23;
+
+    public static final int FEEDER_MOTOR_ID = 3;
+    public static final int FEEDER_SENSOR_ID = 1;
+  }
+
+  public static class ClimberConstants{
+    public static final int CLIMBER_LEFT_MOTOR_ID = 5;
+    public static final int CLIMBER_RIGHT_MOTOR_ID = 0;
+  }
+
+  public static class ElevatorConstants{
+    public static final int ELEVATOR_LEFT_MOTOR_ID = 20;
+    public static final int ELEVATOR_RIGHT_MOTOR_ID = 50;
+
+    public static final int ELEVATOR_BOTTOM_SWITCH_ID = 0;
+  }
+
 }
