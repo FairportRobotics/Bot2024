@@ -4,6 +4,14 @@
 
 package frc.robot;
 
+import frc.robot.commands.ClimberDownCommand;
+import frc.robot.commands.ClimberOffCommand;
+import frc.robot.commands.ClimberUpCommand;
+import frc.robot.commands.FeederOffCommand;
+import frc.robot.commands.FeederOnCommand;
+import frc.robot.commands.IntakeNoteToFeederCommand;
+import frc.robot.commands.IntakeOffCommand;
+import frc.robot.commands.IntakeOnCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -62,10 +70,7 @@ public class RobotContainer {
   private final IntakeSubsystem Intake = new IntakeSubsystem();
   private final ClimberSubsystem climb = new ClimberSubsystem();
 
-  private final Command intakeOn = Intake.intakeOn(0.5);
-  private final Command intakeOff = Intake.intakeOff();
-
-  private final SendableChooser<String> bindingChooser = new SendableChooser<String>();
+  private final SendableChooser<Boolean> bindingChooser = new SendableChooser<Boolean>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -97,8 +102,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shoot", Score.Shoot(2));// Register Named Commands
 
-    bindingChooser.addOption("System Check", "System Check");
-    bindingChooser.addOption("Drive", "Drive");
+    bindingChooser.addOption("System Check", true);
+    bindingChooser.setDefaultOption("Match", false);
 
     SmartDashboard.putData(bindingChooser);
 
@@ -122,33 +127,39 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    //if (bindingChooser.getSelected() == "System Check" && !DriverStation.isFMSAttached()) {
-      if(true){
+    if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
+    // if (true) {
       // SYSTEM CHECK BINDINGS
 
       // here for Scoring subsystem :) change if too low or high
-      //operator.rightBumper().whileTrue(Score.Shoot(0.5));
-      operator.leftTrigger().onTrue(intakeOn);
-      operator.rightTrigger().onTrue(intakeOff);
+      operator.rightBumper().whileTrue(Score.Shoot(0.5));
+      operator.leftTrigger().onTrue(new IntakeOnCommand(Intake, 0.1));
+      operator.rightTrigger().onTrue(new IntakeOffCommand(Intake));
       // here for intake subsystem :)
-      operator.leftBumper().onTrue(Intake.feederOn(0.1));
-      operator.rightBumper().onTrue(Intake.feederOff());
-      // Climer
-      //operator.x().whileTrue(climb.climbUp(1));
-      //operator.y().whileTrue(climb.climbDown(-1));
-      // driver.x().onTrue(CommandSwerveDrivetrain.randomAutoCommand(getAutonomousCommand())); //path
+      operator.leftBumper().onTrue(new FeederOnCommand(Intake, 0.1));
+      operator.rightBumper().onTrue(new FeederOffCommand(Intake));
+      // Climber
+      operator.x().onTrue(new ClimberUpCommand(climb, 0.1));
+      operator.x().onFalse(new ClimberOffCommand(climb));
+      operator.y().onTrue(new ClimberDownCommand(climb, 0.1));
+      operator.y().onFalse(new ClimberOffCommand(climb));
+
+      // //path
 
       // reset the field-centric heading on left bumper press
-      //operator.x().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
+      // operator.x().onTrue(drivetrain.runOnce(() ->
+      // drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
     } else {
       // NORMAL DRIVE MODE BINDINGS
-      
-      operator.a().onTrue(Intake.intakeNoteToFeeder());
+
+      operator.a().onTrue(new IntakeNoteToFeederCommand(Intake));
 
       driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
       driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
-      //driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" autog
-      //driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
+      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //
+      // "Auto" autog
+      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
+      // "Fastest" auto
     }
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
