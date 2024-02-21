@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
         };
     }
 
-    // To turn on intake
+    // To turn off intake
     public Command intakeOff() {
         return new Command() {
             @Override

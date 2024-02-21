@@ -127,26 +127,25 @@ public class RobotContainer {
       operator.rightBumper().whileTrue(Score.Shoot(0.5));
       operator.rightTrigger().whileTrue(Score.elevatorUp(0.5));
       operator.leftTrigger().whileTrue(Score.elevatorDown(-0.5));
-      // driver.x().onTrue(CommandSwerveDrivetrain.randomAutoCommand(getAutonomousCommand()));
-      // // "random" auto
-      // driver.y().onTrue(CommandSwerveDrivetrain.fiveNoteAuto(getAutonomousCommand()));
-      // // "five note" auto
       // here for intake subsystem :)
-      operator.a().whileTrue(Intake.intakeOn(0.5));
+      operator.leftBumper().whileTrue(Intake.intakeOn(0.5));
       operator.b().whileTrue(Intake.intakeOff());
       // Climer
-      operator.leftBumper().whileTrue(climb.climbUp(1));
-      operator.rightBumper().whileTrue(climb.climbDown(-1));
+      operator.x().whileTrue(climb.climbUp(1));
+      operator.y().whileTrue(climb.climbDown(-1));
+      // driver.x().onTrue(CommandSwerveDrivetrain.randomAutoCommand(getAutonomousCommand())); //path
 
       // reset the field-centric heading on left bumper press
-      operator.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+      operator.x().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
     } else {
       // NORMAL DRIVE MODE BINDINGS
-
+      
       operator.a().onTrue(Intake.intakeNoteToFeeder());
 
-      driver.x().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
-      driver.y().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
+      driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
+      driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
+      //driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" autog
+      //driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
     }
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
