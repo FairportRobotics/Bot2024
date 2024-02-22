@@ -9,6 +9,7 @@ public class ClimberOffCommand extends Command{
 
     public ClimberOffCommand(ClimberSubsystem climberSubsystem){
         _climberSubsystem = climberSubsystem;
+        addRequirements(_climberSubsystem);
     }
 
     @Override

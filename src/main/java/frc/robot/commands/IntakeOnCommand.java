@@ -13,6 +13,8 @@ public class IntakeOnCommand extends Command{
     public IntakeOnCommand(IntakeSubsystem intakeSubsystem, double intakeSpeed){
         _IntakeSubsystem = intakeSubsystem;
         this.intakeSpeed = intakeSpeed;
+
+        addRequirements(_IntakeSubsystem);
     }
 
     @Override

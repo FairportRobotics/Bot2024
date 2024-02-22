@@ -11,6 +11,8 @@ public class IntakeOffCommand extends Command{
 
     public IntakeOffCommand(IntakeSubsystem intakeSubsystem){
         _IntakeSubsystem = intakeSubsystem;
+
+        addRequirements(_IntakeSubsystem);
     }
 
     @Override

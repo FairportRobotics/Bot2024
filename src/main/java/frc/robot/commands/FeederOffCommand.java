@@ -11,6 +11,7 @@ public class FeederOffCommand extends Command {
 
     public FeederOffCommand(IntakeSubsystem intakeSubsystem) {
         _intakeSubsystem = intakeSubsystem;
+        addRequirements(_intakeSubsystem);
     }
 
     @Override

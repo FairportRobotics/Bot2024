@@ -11,6 +11,7 @@ public class ClimberDownCommand extends Command{
     public ClimberDownCommand(ClimberSubsystem climberSubsystem, double speed){
         _climberSubsystem = climberSubsystem;
         this.speed = speed;
+        addRequirements(_climberSubsystem);
     }
 
     @Override

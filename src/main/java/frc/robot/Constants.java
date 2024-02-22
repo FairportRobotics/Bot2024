@@ -48,7 +48,7 @@ public final class Constants {
 
   public static class ClimberConstants{
     public static final int CLIMBER_LEFT_MOTOR_ID = 5;
-    public static final int CLIMBER_RIGHT_MOTOR_ID = 0;
+    public static final int CLIMBER_RIGHT_MOTOR_ID = 21;
   }
 
   public static class ElevatorConstants{

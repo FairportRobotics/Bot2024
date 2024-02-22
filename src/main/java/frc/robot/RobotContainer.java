@@ -7,11 +7,16 @@ package frc.robot;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberOffCommand;
 import frc.robot.commands.ClimberUpCommand;
+import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.ElevatorOffCommand;
+import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.FeederOffCommand;
 import frc.robot.commands.FeederOnCommand;
 import frc.robot.commands.IntakeNoteToFeederCommand;
 import frc.robot.commands.IntakeOffCommand;
 import frc.robot.commands.IntakeOnCommand;
+import frc.robot.commands.ShooterOffCommand;
+import frc.robot.commands.ShooterOnCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -72,6 +77,27 @@ public class RobotContainer {
 
   private final SendableChooser<Boolean> bindingChooser = new SendableChooser<Boolean>();
 
+  public class Commands {
+    public Command intakeOnCommand = new IntakeOnCommand(Intake, 0.3);
+    public Command intakeOffCommand = new IntakeOffCommand(Intake);
+
+    public Command feederOnCommand = new FeederOnCommand(Intake, 0.25);
+    public Command feederOffCommand = new FeederOffCommand(Intake);
+
+    public Command shooterOnCommand = new ShooterOnCommand(Score, 0.75);
+    public Command shooterOffCommand = new ShooterOffCommand(Score);
+
+    public Command elevatorUpCommand = new ElevatorUpCommand(Score, 0.1);
+    public Command elevatorDownCommand = new ElevatorDownCommand(Score, 0.1);
+    public Command elevatorOffCommand = new ElevatorOffCommand(Score);
+
+    public Command climberUpCommand = new ClimberUpCommand(climb, 0.75);
+    public Command climberDownCommand = new ClimberDownCommand(climb, 0.75);
+    public Command climberOffCommand = new ClimberOffCommand(climb);
+  }
+
+  Commands commands = new Commands();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -100,7 +126,7 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-    NamedCommands.registerCommand("Shoot", Score.Shoot(2));// Register Named Commands
+    NamedCommands.registerCommand("Shoot", null);// Register Named Commands
 
     bindingChooser.addOption("System Check", true);
     bindingChooser.setDefaultOption("Match", false);
@@ -127,22 +153,29 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
-    // if (true) {
+    //if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
+      if (true) {
       // SYSTEM CHECK BINDINGS
 
       // here for Scoring subsystem :) change if too low or high
-      operator.rightBumper().whileTrue(Score.Shoot(0.5));
-      operator.leftTrigger().onTrue(new IntakeOnCommand(Intake, 0.1));
-      operator.rightTrigger().onTrue(new IntakeOffCommand(Intake));
+      operator.x().onTrue(commands.shooterOnCommand);
+      operator.x().onFalse(commands.shooterOffCommand);
+
+      operator.rightBumper().onTrue(commands.intakeOnCommand);
+      operator.rightBumper().onFalse(commands.intakeOffCommand);
       // here for intake subsystem :)
-      operator.leftBumper().onTrue(new FeederOnCommand(Intake, 0.1));
-      operator.rightBumper().onTrue(new FeederOffCommand(Intake));
+      operator.leftBumper().onTrue(commands.feederOnCommand);
+      operator.leftBumper().onFalse(commands.feederOffCommand);
       // Climber
-      operator.x().onTrue(new ClimberUpCommand(climb, 0.1));
-      operator.x().onFalse(new ClimberOffCommand(climb));
-      operator.y().onTrue(new ClimberDownCommand(climb, 0.1));
-      operator.y().onFalse(new ClimberOffCommand(climb));
+      operator.rightTrigger().onTrue(commands.climberUpCommand);
+      operator.rightTrigger().onFalse(commands.climberOffCommand);
+      operator.leftTrigger().onTrue(commands.climberDownCommand);
+      operator.leftTrigger().onFalse(commands.climberOffCommand);
+
+      operator.a().onTrue(commands.elevatorUpCommand);
+      operator.a().onFalse(commands.elevatorOffCommand);
+      operator.b().onTrue(commands.elevatorDownCommand);
+      operator.b().onFalse(commands.elevatorOffCommand);
 
       // //path
 

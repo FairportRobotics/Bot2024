@@ -12,6 +12,7 @@ public class FeederOnCommand extends Command {
     public FeederOnCommand(IntakeSubsystem intakeSubsystem, double speed) {
         _intakeSubsystem = intakeSubsystem;
         this.speed = speed;
+        addRequirements(_intakeSubsystem);
     }
 
     @Override

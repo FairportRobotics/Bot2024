@@ -12,6 +12,8 @@ public class IntakeNoteToFeederCommand extends Command {
 
     public IntakeNoteToFeederCommand(IntakeSubsystem intakeSubsystem) {
         _intakeSubsystem = intakeSubsystem;
+
+        addRequirements(_intakeSubsystem);
     }
 
     @Override
