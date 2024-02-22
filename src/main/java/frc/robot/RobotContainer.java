@@ -92,8 +92,9 @@ public class RobotContainer {
     public Command intakeOnCommand = new IntakeOnCommand(Intake, 0.3);
     public Command intakeOffCommand = new IntakeOffCommand(Intake);
 
-    public Command feederOnCommand = new FeederOnCommand(Intake, 0.25);
+    public Command feederFwdCommand = new FeederOnCommand(Intake, 0.25);
     public Command feederOffCommand = new FeederOffCommand(Intake);
+    public Command feederRevCommand = new FeederOnCommand(Intake, -0.25);
 
     public Command shooterOnCommand = new ShooterOnCommand(Score, 0.75);
     public Command shooterOffCommand = new ShooterOffCommand(Score);
@@ -206,8 +207,10 @@ public class RobotContainer {
       operator.rightBumper().onTrue(commands.intakeOnCommand);
       operator.rightBumper().onFalse(commands.intakeOffCommand);
       // here for intake subsystem :)
-      operator.leftBumper().onTrue(commands.feederOnCommand);
+      operator.leftBumper().onTrue(commands.feederFwdCommand);
       operator.leftBumper().onFalse(commands.feederOffCommand);
+      operator.y().onTrue(commands.feederRevCommand);
+      operator.y().onFalse(commands.feederOffCommand);
       // Climber
       operator.rightTrigger().onTrue(commands.climberUpCommand);
       operator.rightTrigger().onFalse(commands.climberOffCommand);
