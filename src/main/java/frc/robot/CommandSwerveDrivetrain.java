@@ -17,6 +17,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -43,7 +44,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             startSimThread();
         }
 
-        getPigeon2().getConfigurator().apply(new MountPoseConfigs(){
+        getPigeon2().getConfigurator().apply(new MountPoseConfigs() {
 
         });
     }
@@ -79,6 +80,25 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     return false;
                 },
                 this // Reference to this subsystem to set requirements
+        );
+        
+        // Since we are using a holonomic drivetrain, the rotation component of this
+        // pose
+        // represents the goal holonomic rotation
+        Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
+
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+                3.0, 4.0,
+                Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        Command pathfindingCommand = AutoBuilder.pathfindToPose(
+                targetPose,
+                constraints,
+                0.0, // Goal end velocity in meters/sec
+                0.0 // Rotation delay distance in meters. This is how far the robot should travel
+                    // before attempting to rotate.
         );
     }
 
@@ -119,7 +139,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    public static Command followPathToSpeaker() { //PATHS NOT AUTOS
+    public static Command followPathToSpeaker() { // PATHS NOT AUTOS
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile("ToAmp");
 
@@ -138,7 +158,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         );
         return pathfindingCommand;
     }
-    public static Command followPathToAmp() { //PATHS NOT AUTOS
+
+    public static Command followPathToAmp() { // PATHS NOT AUTOS
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile("ToSpeaker");
 
@@ -161,13 +182,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public static Command fastestAutoCommand() {
         return new PathPlannerAuto("Fastest");
     }
+
     public static Command autoAutoCommand() {
         return new PathPlannerAuto("Auto");
     }
-    public static Command randomAutoCommand() { //commented out
+
+    public static Command randomAutoCommand() { // commented out
         return new PathPlannerAuto("Random auto");
     }
-    public static Command fiveNoteAuto() { //commented out
+
+    public static Command fiveNoteAuto() { // commented out
         return new PathPlannerAuto("5 note auto");
     }
 }
