@@ -168,6 +168,7 @@ public class RobotContainer {
       operator.leftBumper().onTrue(commands.feederFwdCommand);
       operator.leftBumper().onFalse(commands.feederOffCommand);
       operator.y().onTrue(commands.feederRevCommand);
+      operator.y().onFalse(commands.feederOffCommand);
       // Climber
       operator.rightTrigger().onTrue(commands.climberUpCommand);
       operator.rightTrigger().onFalse(commands.climberOffCommand);
