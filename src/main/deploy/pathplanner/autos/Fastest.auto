@@ -1,0 +1,85 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.45,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom 3.13"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middel 2.72"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top 3.94"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

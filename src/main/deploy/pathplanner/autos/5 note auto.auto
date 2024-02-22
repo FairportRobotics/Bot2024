@@ -1,0 +1,103 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.45,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "pick shoot bottom"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of New New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -1,0 +1,79 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.45,
+      "y": 5.558377783422233
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middel 2.72"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Top 3.94"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To note(left 1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To note(left 2)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shootable"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
