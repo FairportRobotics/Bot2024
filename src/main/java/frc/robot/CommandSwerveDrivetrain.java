@@ -12,6 +12,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -54,52 +56,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
-                                                 // Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
         
-        // Since we are using a holonomic drivetrain, the rotation component of this
-        // pose
-        // represents the goal holonomic rotation
-        Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
-
-        // Create the constraints to use while pathfinding
-        PathConstraints constraints = new PathConstraints(
-                3.0, 4.0,
-                Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        Command pathfindingCommand = AutoBuilder.pathfindToPose(
-                targetPose,
-                constraints,
-                0.0, // Goal end velocity in meters/sec
-                0.0 // Rotation delay distance in meters. This is how far the robot should travel
-                    // before attempting to rotate.
-        );
     }
 
     private void startSimThread() {
@@ -139,59 +96,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    public static Command followPathToSpeaker() { // PATHS NOT AUTOS
-        // Load the path we want to pathfind to and follow
-        PathPlannerPath path = PathPlannerPath.fromPathFile("ToAmp");
+    // Since we are using a holonomic drivetrain, the rotation component of this
+    // pose
+    // represents the goal holonomic rotation
+    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(90.0));// Speaker pos
+    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(90.0));// amp pos
 
-        // Create the constraints to use while pathfinding. The constraints defined in
-        // the path will only be used for the path.
-        PathConstraints constraints = new PathConstraints(
-                3.0, 4.0,
-                Units.degreesToRadians(540), Units.degreesToRadians(720));
+    // Create the constraints to use while pathfinding
+    public PathConstraints constraints = new PathConstraints(
+            3.0, 2.0,
+            Units.degreesToRadians(270), Units.degreesToRadians(360));
 
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-                path,
-                constraints,
-                3.0 // Rotation delay distance in meters. This is how far the robot should travel
-                    // before attempting to rotate.
-        );
-        return pathfindingCommand;
-    }
-
-    public static Command followPathToAmp() { // PATHS NOT AUTOS
-        // Load the path we want to pathfind to and follow
-        PathPlannerPath path = PathPlannerPath.fromPathFile("ToSpeaker");
-
-        // Create the constraints to use while pathfinding. The constraints defined in
-        // the path will only be used for the path.
-        PathConstraints constraints = new PathConstraints(
-                3.0, 4.0,
-                Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-                path,
-                constraints,
-                3.0 // Rotation delay distance in meters. This is how far the robot should travel
-                    // before attempting to rotate.
-        );
-        return pathfindingCommand;
-    }
-
-    public static Command fastestAutoCommand() {
-        return new PathPlannerAuto("Fastest");
-    }
-
-    public static Command autoAutoCommand() {
-        return new PathPlannerAuto("Auto");
-    }
-
-    public static Command randomAutoCommand() { // commented out
-        return new PathPlannerAuto("Random auto");
-    }
-
-    public static Command fiveNoteAuto() { // commented out
-        return new PathPlannerAuto("5 note auto");
-    }
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
 }

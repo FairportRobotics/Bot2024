@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoScoreCommands;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberOffCommand;
 import frc.robot.commands.ClimberUpCommand;
@@ -23,8 +24,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -53,6 +59,11 @@ public class RobotContainer {
   private double MaxSpeed = 6; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   // The robot's subsystems and commands are defined here...
+  public final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  PathPlannerAuto _fastest = new PathPlannerAuto("Fastest");
+  PathPlannerAuto _auto = new PathPlannerAuto("Auto");
+  PathPlannerAuto _randomAuto = new PathPlannerAuto("Random auto");
+  PathPlannerAuto _fiveNoteAuto = new PathPlannerAuto("5 note auto");
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
@@ -94,6 +105,8 @@ public class RobotContainer {
     public Command climberUpCommand = new ClimberUpCommand(climb, 0.75);
     public Command climberDownCommand = new ClimberDownCommand(climb, 0.75);
     public Command climberOffCommand = new ClimberOffCommand(climb);
+
+    public AutoScoreCommands autoScoreCommands = new AutoScoreCommands(Score, climb, Intake, drivetrain);
   }
 
   Commands commands = new Commands();
@@ -131,10 +144,39 @@ public class RobotContainer {
     bindingChooser.addOption("System Check", true);
     bindingChooser.setDefaultOption("Match", false);
 
+    autoChooser.addOption("Auto1", _fastest);
+    SmartDashboard.putData(autoChooser);
+
     SmartDashboard.putData(bindingChooser);
 
-    configureBindings();
+    AutoBuilder.configureHolonomic(
+        drivetrain::getPose, // Robot pose supplier
+        drivetrain::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        drivetrain::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        drivetrain::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
+                                         // Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        drivetrain // Reference to this subsystem to set requirements
+    );
+    configureBindings();
   }
 
   /**
@@ -153,8 +195,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    //if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
-      if (true) {
+    // if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
+    if (true) {
       // SYSTEM CHECK BINDINGS
 
       // here for Scoring subsystem :) change if too low or high
@@ -172,10 +214,13 @@ public class RobotContainer {
       operator.leftTrigger().onTrue(commands.climberDownCommand);
       operator.leftTrigger().onFalse(commands.climberOffCommand);
 
-      operator.a().onTrue(commands.elevatorUpCommand);
-      operator.a().onFalse(commands.elevatorOffCommand);
+      // operator.a().onTrue(commands.elevatorUpCommand);
+      // operator.a().onFalse(commands.elevatorOffCommand);
       operator.b().onTrue(commands.elevatorDownCommand);
       operator.b().onFalse(commands.elevatorOffCommand);
+
+      operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
+      operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
 
       // //path
 
