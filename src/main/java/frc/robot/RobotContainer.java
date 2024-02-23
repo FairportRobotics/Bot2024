@@ -237,7 +237,7 @@ public class RobotContainer {
       operator.b().onTrue(commands.elevatorDownCommand);
       operator.b().onFalse(commands.elevatorOffCommand);
 
-      operator.start().onTrue(commands.shootCommand);
+      driver.x().onTrue(commands.shootCommand);
 
       // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
       // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
