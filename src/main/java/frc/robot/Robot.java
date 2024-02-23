@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,8 +35,6 @@ public class Robot extends LoggedRobot {
 
   private RobotContainer m_robotContainer;
 
-  
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -47,7 +46,7 @@ public class Robot extends LoggedRobot {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
     if (isReal()) {
-      //Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+      // Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
       new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
     } else if (isSimulation()) {
@@ -110,14 +109,30 @@ public class Robot extends LoggedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
+    // selectedAutoCommand = autoChooser.getSelected();
+    // System.out.println("Auto selected: " + selectedAuto);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // switch (selectedAuto) {
+    //   case "Fastest":
+    //     // Put custom auto code here
+    //     break;
+    //   case "Auto":
+    //     break;
+    //   case "Random auto":
+    //     break;
+    //   case "5 note auto":
+    //     break;
+    //   default:
+    //     // Put default auto code here
+    //     break;
+    // }
   }
 
   @Override

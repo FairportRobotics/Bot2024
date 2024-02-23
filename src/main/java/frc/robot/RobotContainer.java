@@ -16,11 +16,14 @@ import frc.robot.commands.FeederOnCommand;
 import frc.robot.commands.IntakeNoteToFeederCommand;
 import frc.robot.commands.IntakeOffCommand;
 import frc.robot.commands.IntakeOnCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterOffCommand;
 import frc.robot.commands.ShooterOnCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+
+
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -56,14 +59,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  
   private double MaxSpeed = 6; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   // The robot's subsystems and commands are defined here...
-  public final SendableChooser<Command> autoChooser = new SendableChooser<>();
-  PathPlannerAuto _fastest = new PathPlannerAuto("Fastest");
-  PathPlannerAuto _auto = new PathPlannerAuto("Auto");
-  PathPlannerAuto _randomAuto = new PathPlannerAuto("Random auto");
-  PathPlannerAuto _fiveNoteAuto = new PathPlannerAuto("5 note auto");
+  // public final static SendableChooser<Command> autoChooser = new SendableChooser<>();
+  // public PathPlannerAuto _fastest = new PathPlannerAuto("Fastest");
+  // public PathPlannerAuto _auto = new PathPlannerAuto("Auto");
+  // public PathPlannerAuto _randomAuto = new PathPlannerAuto("Random auto");
+  // public PathPlannerAuto _fiveNoteAuto = new PathPlannerAuto("5 note auto");
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
@@ -82,32 +87,37 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  private final ScoringSubsystem Score = new ScoringSubsystem();
-  private final IntakeSubsystem Intake = new IntakeSubsystem();
-  private final ClimberSubsystem climb = new ClimberSubsystem();
+  private final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
   private final SendableChooser<Boolean> bindingChooser = new SendableChooser<Boolean>();
 
   public class Commands {
-    public Command intakeOnCommand = new IntakeOnCommand(Intake, 0.3);
-    public Command intakeOffCommand = new IntakeOffCommand(Intake);
+    
+    public Command intakeOnCommand = new IntakeOnCommand(intakeSubsystem, 1.0);
+    public Command intakeOffCommand = new IntakeOffCommand(intakeSubsystem);
 
-    public Command feederFwdCommand = new FeederOnCommand(Intake, 0.25);
-    public Command feederOffCommand = new FeederOffCommand(Intake);
-    public Command feederRevCommand = new FeederOnCommand(Intake, -0.25);
+    public Command feederFwdCommand = new FeederOnCommand(intakeSubsystem, 0.25);
+    public Command feederOffCommand = new FeederOffCommand(intakeSubsystem);
+    public Command feederRevCommand = new FeederOnCommand(intakeSubsystem, -0.15);
 
-    public Command shooterOnCommand = new ShooterOnCommand(Score, 0.75);
-    public Command shooterOffCommand = new ShooterOffCommand(Score);
+    public Command shooterOnCommand = new ShooterOnCommand(scoringSubsystem, 1.0);
+    public Command shooterOffCommand = new ShooterOffCommand(scoringSubsystem);
 
-    public Command elevatorUpCommand = new ElevatorUpCommand(Score, 0.1);
-    public Command elevatorDownCommand = new ElevatorDownCommand(Score, 0.1);
-    public Command elevatorOffCommand = new ElevatorOffCommand(Score);
+    public Command elevatorUpCommand = new ElevatorUpCommand(scoringSubsystem, 0.1);
+    public Command elevatorDownCommand = new ElevatorDownCommand(scoringSubsystem, 0.1);
+    public Command elevatorOffCommand = new ElevatorOffCommand(scoringSubsystem);
 
-    public Command climberUpCommand = new ClimberUpCommand(climb, 0.75);
-    public Command climberDownCommand = new ClimberDownCommand(climb, 0.75);
-    public Command climberOffCommand = new ClimberOffCommand(climb);
+    public Command climberUpCommand = new ClimberUpCommand(climberSubsystem, 0.40);
+    public Command climberDownCommand = new ClimberDownCommand(climberSubsystem, 0.40);
+    public Command climberOffCommand = new ClimberOffCommand(climberSubsystem);
 
-    public AutoScoreCommands autoScoreCommands = new AutoScoreCommands(Score, climb, Intake, drivetrain);
+    public Command shootCommand = new ShootCommand(scoringSubsystem, intakeSubsystem);
+
+    //public AutoScoreCommands autoScoreCommands = new AutoScoreCommands(Score, climb, Intake, drivetrain);
+    // public Command SCORE_AMP = autoScoreCommands.scoreAmpCommand;
+    // public Command SCORE_SPEAKER = autoScoreCommands.scoreSpeakerCommand;
   }
 
   Commands commands = new Commands();
@@ -145,8 +155,13 @@ public class RobotContainer {
     bindingChooser.addOption("System Check", true);
     bindingChooser.setDefaultOption("Match", false);
 
-    autoChooser.addOption("Auto1", _fastest);
-    SmartDashboard.putData(autoChooser);
+    // autoChooser.setDefaultOption("Auto1", _fastest);
+    // autoChooser.addOption("Auto1", _auto);
+    // autoChooser.addOption("Auto1", _fiveNoteAuto);
+    // autoChooser.addOption("Auto1", _randomAuto);
+    // autoChooser.addOption("SHOOT_SPEAKER", commands.SCORE_SPEAKER);
+    // autoChooser.addOption("SHOOT_AMP", commands.SCORE_AMP);
+    // SmartDashboard.putData(autoChooser);
 
     SmartDashboard.putData(bindingChooser);
 
@@ -217,30 +232,29 @@ public class RobotContainer {
       operator.leftTrigger().onTrue(commands.climberDownCommand);
       operator.leftTrigger().onFalse(commands.climberOffCommand);
 
-      // operator.a().onTrue(commands.elevatorUpCommand);
-      // operator.a().onFalse(commands.elevatorOffCommand);
+      operator.a().onTrue(commands.elevatorUpCommand);
+      operator.a().onFalse(commands.elevatorOffCommand);
       operator.b().onTrue(commands.elevatorDownCommand);
       operator.b().onFalse(commands.elevatorOffCommand);
 
-      operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
-      operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
+      operator.start().onTrue(commands.shootCommand);
+
+      // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
+      // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
 
       // //path
 
       // reset the field-centric heading on left bumper press
-      // operator.x().onTrue(drivetrain.runOnce(() ->
-      // drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
+       operator.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
     } else {
       // NORMAL DRIVE MODE BINDINGS
 
-      operator.a().onTrue(new IntakeNoteToFeederCommand(Intake));
+      operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
 
-      driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
-      driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
-      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //
-      // "Auto" autog
-      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
-      // "Fastest" auto
+      //driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
+      //driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
+      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //"Auto" autog
+      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
     }
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -271,6 +285,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return CommandSwerveDrivetrain.autoAutoCommand();
+    return new Command() {
+      
+    };//autoChooser.getSelected();
   }
 }

@@ -24,16 +24,19 @@ public class ScoringSubsystem extends SubsystemBase {
         //toplimitSwitch = new DigitalInput(8);
         bottomlimitSwitch = new DigitalInput(Constants.ElevatorConstants.ELEVATOR_BOTTOM_SWITCH_ID);
 
-        elevatorLeftMotor.setInverted(false);
         TalonFXConfiguration elevatorMotor1Config = new TalonFXConfiguration();
         elevatorMotor1Config.Slot0.kP = 1;
         elevatorMotor1Config.Slot0.kI = 0;
         elevatorMotor1Config.Slot0.kD = 0;
         elevatorLeftMotor.getConfigurator().apply(elevatorMotor1Config);
+        elevatorLeftMotor.setInverted(false);
 
-
+        TalonFXConfiguration elevatorMotor2Config = new TalonFXConfiguration();
+        elevatorMotor2Config.Slot0.kP = 1;
+        elevatorMotor2Config.Slot0.kI = 0;
+        elevatorMotor2Config.Slot0.kD = 0;
+        elevatorRightMotor.getConfigurator().apply(elevatorMotor2Config);
         elevatorRightMotor.setInverted(true);
-        elevatorRightMotor.getConfigurator().apply(elevatorMotor1Config);
 
         shooterLeftMotor.setInverted(false);
         shooterRightMotor.setInverted(true);

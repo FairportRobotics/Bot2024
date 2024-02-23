@@ -19,4 +19,9 @@ public class FeederOnCommand extends Command {
     public void initialize() {
         _intakeSubsystem.feederMotor.set(speed);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

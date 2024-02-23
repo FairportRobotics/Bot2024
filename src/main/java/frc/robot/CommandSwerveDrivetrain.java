@@ -99,8 +99,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     // Since we are using a holonomic drivetrain, the rotation component of this
     // pose
     // represents the goal holonomic rotation
-    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(90.0));// Speaker pos
-    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(90.0));// amp pos
+    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(90.0));// Speaker pos according to pathplanner
+    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(90.0));// amp pos according to pathplanner
 
     // Create the constraints to use while pathfinding
     public PathConstraints constraints = new PathConstraints(

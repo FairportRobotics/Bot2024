@@ -22,6 +22,10 @@ public class ElevatorGoToPosCommand extends Command {
     @Override
     public void initialize() {
 
+        if(_scoringSubsystem.leftHomePos == -1.1111 || _scoringSubsystem.rightHomePos == -1.1111){
+            beforeStarting(new ElevatorAutoHomeCommand(_scoringSubsystem));
+        } 
+
         if (requestPos == ElevatorPosition.kHome) {
             _scoringSubsystem.elevatorRightMotor.setPosition(_scoringSubsystem.rightHomePos);
             _scoringSubsystem.elevatorLeftMotor.setPosition(_scoringSubsystem.leftHomePos);
