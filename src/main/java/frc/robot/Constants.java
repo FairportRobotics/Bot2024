@@ -34,8 +34,8 @@ public final class Constants {
 
 
   public static class ShooterContants{
-    public static final int SHOOTER_LEFT_MOTOR_ID = 58;
-    public static final int SHOOTER_RIGHT_MOTOR_ID = 4;
+    public static final int SHOOTER_TOP_MOTOR_ID = 58;
+    public static final int SHOOTER_BOTTOM_MOTOR_ID = 4;
   }
 
   public static class IntakeConstants {

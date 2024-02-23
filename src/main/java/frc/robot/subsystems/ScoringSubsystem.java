@@ -12,8 +12,8 @@ public class ScoringSubsystem extends SubsystemBase {
     public double rightHomePos = -1.1111;
     public double leftHomePos = -1.1111;
 
-    public TalonFX shooterLeftMotor = new TalonFX(Constants.ShooterContants.SHOOTER_LEFT_MOTOR_ID);
-    public TalonFX shooterRightMotor = new TalonFX(Constants.ShooterContants.SHOOTER_RIGHT_MOTOR_ID);
+    public TalonFX shooterTopMotor = new TalonFX(Constants.ShooterContants.SHOOTER_TOP_MOTOR_ID);
+    public TalonFX shooterBottomMotor = new TalonFX(Constants.ShooterContants.SHOOTER_BOTTOM_MOTOR_ID);
 
     public TalonFX elevatorLeftMotor = new TalonFX(Constants.ElevatorConstants.ELEVATOR_LEFT_MOTOR_ID);
     public TalonFX elevatorRightMotor = new TalonFX(Constants.ElevatorConstants.ELEVATOR_RIGHT_MOTOR_ID);
@@ -38,8 +38,8 @@ public class ScoringSubsystem extends SubsystemBase {
         elevatorRightMotor.getConfigurator().apply(elevatorMotor2Config);
         elevatorRightMotor.setInverted(true);
 
-        shooterLeftMotor.setInverted(false);
-        shooterRightMotor.setInverted(true);
+        shooterTopMotor.setInverted(false);
+        shooterBottomMotor.setInverted(false);
 
     }
 

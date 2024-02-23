@@ -16,8 +16,8 @@ public class ShooterOnCommand extends Command{
 
     @Override
     public void initialize() {
-        _scoringSubsystem.shooterLeftMotor.set(speed);
-        _scoringSubsystem.shooterRightMotor.set(speed);
+        _scoringSubsystem.shooterTopMotor.set(speed);
+        _scoringSubsystem.shooterBottomMotor.set(speed);
     }
 
     @Override
