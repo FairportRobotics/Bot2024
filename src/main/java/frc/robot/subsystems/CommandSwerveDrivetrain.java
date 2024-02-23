@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
@@ -8,23 +8,14 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -38,6 +29,18 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+
+    // Since we are using a holonomic drivetrain, the rotation component of this
+    // pose
+    // represents the goal holonomic rotation
+    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(180.0));// Speaker pos according to pathplanner
+    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(0.0));// amp pos according to pathplanner
+
+    // Create the constraints to use while pathfinding
+    public PathConstraints constraints = new PathConstraints(
+            3.0, 2.0,
+            Units.degreesToRadians(270), Units.degreesToRadians(360));
+
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
@@ -96,16 +99,4 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    // Since we are using a holonomic drivetrain, the rotation component of this
-    // pose
-    // represents the goal holonomic rotation
-    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(90.0));// Speaker pos according to pathplanner
-    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(90.0));// amp pos according to pathplanner
-
-    // Create the constraints to use while pathfinding
-    public PathConstraints constraints = new PathConstraints(
-            3.0, 2.0,
-            Units.degreesToRadians(270), Units.degreesToRadians(360));
-
-    // Since AutoBuilder is configured, we can use it to build pathfinding commands
 }

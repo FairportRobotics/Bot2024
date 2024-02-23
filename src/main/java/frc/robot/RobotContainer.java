@@ -4,6 +4,28 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoScoreCommands;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberOffCommand;
@@ -21,33 +43,9 @@ import frc.robot.commands.ShooterOffCommand;
 import frc.robot.commands.ShooterOnCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
-
-
-
-import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ScoringSubsystem;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -59,17 +57,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  
+
   private double MaxSpeed = 6; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   // The robot's subsystems and commands are defined here...
-  // public final static SendableChooser<Command> autoChooser = new SendableChooser<>();
-  // public PathPlannerAuto _fastest = new PathPlannerAuto("Fastest");
-  // public PathPlannerAuto _auto = new PathPlannerAuto("Auto");
-  // public PathPlannerAuto _randomAuto = new PathPlannerAuto("Random auto");
-  // public PathPlannerAuto _fiveNoteAuto = new PathPlannerAuto("5 note auto");
-  
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController operator = new CommandXboxController(
@@ -77,7 +68,7 @@ public class RobotContainer {
   // IN SIM
   private final CommandXboxController driver = new CommandXboxController(
       Constants.OperatorConstants.kDriverControllerPort); // driver
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final CommandSwerveDrivetrain drivetrainSubsystem = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -91,10 +82,10 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
-  private final SendableChooser<Boolean> bindingChooser = new SendableChooser<Boolean>();
+  public SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   public class Commands {
-    
+
     public Command intakeOnCommand = new IntakeOnCommand(intakeSubsystem, 1.0);
     public Command intakeOffCommand = new IntakeOffCommand(intakeSubsystem);
 
@@ -115,12 +106,14 @@ public class RobotContainer {
 
     public Command shootCommand = new ShootCommand(scoringSubsystem, intakeSubsystem);
 
-    //public AutoScoreCommands autoScoreCommands = new AutoScoreCommands(Score, climb, Intake, drivetrain);
-    // public Command SCORE_AMP = autoScoreCommands.scoreAmpCommand;
-    // public Command SCORE_SPEAKER = autoScoreCommands.scoreSpeakerCommand;
+    private AutoScoreCommands autoScoreCommands = new AutoScoreCommands(scoringSubsystem, climberSubsystem,
+        intakeSubsystem, drivetrainSubsystem);
+
+    public Command scoreAmpCommand = autoScoreCommands.scoreAmpCommand;
+    public Command scoreSpeakerCommand = autoScoreCommands.scoreSpeakerCommand;
   }
 
-  Commands commands = new Commands();
+  Commands commands;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -152,24 +145,11 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shoot", null);// Register Named Commands
 
-    bindingChooser.addOption("System Check", true);
-    bindingChooser.setDefaultOption("Match", false);
-
-    // autoChooser.setDefaultOption("Auto1", _fastest);
-    // autoChooser.addOption("Auto1", _auto);
-    // autoChooser.addOption("Auto1", _fiveNoteAuto);
-    // autoChooser.addOption("Auto1", _randomAuto);
-    // autoChooser.addOption("SHOOT_SPEAKER", commands.SCORE_SPEAKER);
-    // autoChooser.addOption("SHOOT_AMP", commands.SCORE_AMP);
-    // SmartDashboard.putData(autoChooser);
-
-    SmartDashboard.putData(bindingChooser);
-
     AutoBuilder.configureHolonomic(
-        drivetrain::getPose, // Robot pose supplier
-        drivetrain::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-        drivetrain::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        drivetrain::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        drivetrainSubsystem::getPose, // Robot pose supplier
+        drivetrainSubsystem::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        drivetrainSubsystem::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        drivetrainSubsystem::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                          // Constants class
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
@@ -190,8 +170,15 @@ public class RobotContainer {
           }
           return false;
         },
-        drivetrain // Reference to this subsystem to set requirements
+        drivetrainSubsystem // Reference to this subsystem to set requirements
     );
+
+    commands = new Commands();
+
+    autoChooser.setDefaultOption("None", new Command() {
+    });
+    SmartDashboard.putData(autoChooser);
+
     configureBindings();
   }
 
@@ -212,7 +199,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     // if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
-    if (true) {
+    if (RobotState.isTest()) {
       // SYSTEM CHECK BINDINGS
 
       // here for Scoring subsystem :) change if too low or high
@@ -237,45 +224,58 @@ public class RobotContainer {
       operator.b().onTrue(commands.elevatorDownCommand);
       operator.b().onFalse(commands.elevatorOffCommand);
 
-      driver.x().onTrue(commands.shootCommand);
+      driver.a().onTrue(commands.shootCommand);
 
       // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
       // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
 
       // //path
 
-      // reset the field-centric heading on left bumper press
-       operator.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
     } else {
       // NORMAL DRIVE MODE BINDINGS
 
       operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
 
-      //driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
-      //driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
-      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //"Auto" autog
-      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
+      // driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
+      // "Fastest" auto
+      // driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto"
+      // auto
+      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //"Auto"
+      // autog
+      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
+      // "Fastest" auto
     }
 
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * MaxSpeed) // Drive
-                                                                                                                         // forward
-                                                                                                                         // with
-            // negative Y (forward)
-            .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * MaxSpeed) // Drive left with negative X
-                                                                                          // (left)
-            .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * MaxAngularRate) // Drive
-                                                                                                       // counterclockwise
-                                                                                                       // with negative
-                                                                                                       // X (left)
-        ));
+    drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrainSubsystem
+            .applyRequest(() -> drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * MaxSpeed) // Drive
+                // forward
+                // with
+                // negative Y (forward)
+                .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * MaxSpeed) // Drive left with
+                                                                                              // negative X
+                                                                                              // (left)
+                .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * MaxAngularRate) // Drive
+                                                                                                           // counterclockwise
+                                                                                                           // with
+                                                                                                           // negative
+                                                                                                           // X (left)
+            ));
 
-    driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    driver.leftTrigger().whileTrue(drivetrainSubsystem.applyRequest(() -> brake));
+
+    // reset the field-centric heading on left bumper press
+    driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative())); // COMMENTED OUT
+                                                                                                       // DUE TO BUTTON
+                                                                                                       // CONFLICTS
+
+    driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
+    driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
 
     if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+      drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
-    drivetrain.registerTelemetry(logger::telemeterize);
+    drivetrainSubsystem.registerTelemetry(logger::telemeterize);
   }
 
   /**
@@ -285,8 +285,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new Command() {
-      
-    };//autoChooser.getSelected();
+    return autoChooser.getSelected();
   }
 }
