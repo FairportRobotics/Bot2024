@@ -43,7 +43,8 @@ public class AutoScoreCommands {
 
 
                 scoreSpeakerCommand = Commands.sequence(
-                        Commands.parallel(new IntakeNoteToFeederCommand(_intakeSubsystem), new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome), AutoBuilder.pathfindToPose(
+                        Commands.parallel(new IntakeNoteToFeederCommand(_intakeSubsystem), new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome), 
+                        AutoBuilder.pathfindToPose(
                         _roboSpeakerPose2d,
                         _constraints,
                         0.0, // Goal end velocity in meters/sec

@@ -49,12 +49,8 @@
       "PathPlanner": {
         "HotReload": {
           "open": true
-        },
-        "open": true
+        }
       }
     }
-  },
-  "NetworkTables Info": {
-    "visible": true
   }
 }

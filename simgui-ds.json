@@ -1,4 +1,9 @@
 {
+  "FMS": {
+    "window": {
+      "visible": false
+    }
+  },
   "Keyboard 0 Settings": {
     "window": {
       "visible": true
@@ -99,5 +104,6 @@
       "guid": "030000004c050000cc09000011810000",
       "useGamepad": true
     }
-  ]
+  ],
+  "zeroDisconnectedJoysticks": false
 }
