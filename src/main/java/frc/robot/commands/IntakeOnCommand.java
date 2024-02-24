@@ -20,7 +20,7 @@ public class IntakeOnCommand extends Command{
     @Override
     public void initialize() {
         _IntakeSubsystem.intakeLeftMotor.set(ControlMode.PercentOutput, intakeSpeed);
-        _IntakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, intakeSpeed);
+//        _IntakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, intakeSpeed);
     }
 
     @Override

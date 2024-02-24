@@ -101,8 +101,7 @@
   ],
   "robotJoysticks": [
     {
-      "guid": "030000004c050000cc09000011810000",
-      "useGamepad": true
+      "guid": "Keyboard0"
     }
   ],
   "zeroDisconnectedJoysticks": false

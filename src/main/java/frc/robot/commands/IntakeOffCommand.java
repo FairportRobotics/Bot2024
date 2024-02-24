@@ -18,7 +18,7 @@ public class IntakeOffCommand extends Command{
     @Override
     public void initialize() {
         _IntakeSubsystem.intakeLeftMotor.set(ControlMode.PercentOutput, 0.0);
-        _IntakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, 0.0);
+//        _IntakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, 0.0);
     }
 
     @Override

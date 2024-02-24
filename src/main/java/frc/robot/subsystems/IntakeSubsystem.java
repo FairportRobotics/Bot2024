@@ -16,5 +16,5 @@ public class IntakeSubsystem extends SubsystemBase {
     public DigitalInput feederSensor = new DigitalInput(Constants.IntakeConstants.FEEDER_SENSOR_ID);
 
     public TalonSRX intakeLeftMotor = new TalonSRX(Constants.IntakeConstants.INTAKE_LEFT_MOTOR_ID);
-    public TalonSRX intakeRightMotor = new TalonSRX(Constants.IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
+//    public TalonSRX intakeRightMotor = new TalonSRX(Constants.IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
 }

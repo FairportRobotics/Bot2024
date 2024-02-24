@@ -64,10 +64,12 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController operator = new CommandXboxController(
-      Constants.OperatorConstants.kOperatiorControllerPort); // operator SHOULD BE ON 1 BUT CONFLICTS
-  // IN SIM
+      Constants.OperatorConstants.kOperatorControllerPort);
   private final CommandXboxController driver = new CommandXboxController(
       Constants.OperatorConstants.kDriverControllerPort); // driver
+  private final CommandXboxController systemCheck = new CommandXboxController(
+      Constants.OperatorConstants.kSystemCheckControllerPort); // systemCheck
+
   private final CommandSwerveDrivetrain drivetrainSubsystem = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -86,7 +88,8 @@ public class RobotContainer {
 
   public class Commands {
 
-    public Command intakeOnCommand = new IntakeOnCommand(intakeSubsystem, 1.0);
+    public Command intakeOnCommand = new IntakeOnCommand(intakeSubsystem, 0.7);
+    public Command intakeRevCommand = new IntakeOnCommand(intakeSubsystem, -0.7);
     public Command intakeOffCommand = new IntakeOffCommand(intakeSubsystem);
 
     public Command feederFwdCommand = new FeederOnCommand(intakeSubsystem, 0.25);
@@ -199,56 +202,56 @@ public class RobotContainer {
   private void configureBindings() {
 
     // if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
-    if (RobotState.isTest()) {
-      // SYSTEM CHECK BINDINGS
+    // SYSTEM CHECK BINDINGS
+    // here for Scoring subsystem :) change if too low or high
+    systemCheck.x().onTrue(commands.shooterOnCommand);
+    systemCheck.x().onFalse(commands.shooterOffCommand);
 
-      // here for Scoring subsystem :) change if too low or high
-      operator.x().onTrue(commands.shooterOnCommand);
-      operator.x().onFalse(commands.shooterOffCommand);
+    systemCheck.rightBumper().onTrue(commands.intakeOnCommand);
+    systemCheck.rightBumper().onFalse(commands.intakeOffCommand);
+    systemCheck.povDown().onTrue(commands.intakeRevCommand);
+    systemCheck.povDown().onFalse(commands.intakeOffCommand);
 
-      operator.rightBumper().onTrue(commands.intakeOnCommand);
-      operator.rightBumper().onFalse(commands.intakeOffCommand);
-      // here for intake subsystem :)
-      operator.leftBumper().onTrue(commands.feederFwdCommand);
-      operator.leftBumper().onFalse(commands.feederOffCommand);
-      operator.y().onTrue(commands.feederRevCommand);
-      operator.y().onFalse(commands.feederOffCommand);
-      // Climber
-      operator.rightTrigger().onTrue(commands.climberUpCommand);
-      operator.rightTrigger().onFalse(commands.climberOffCommand);
-      operator.leftTrigger().onTrue(commands.climberDownCommand);
-      operator.leftTrigger().onFalse(commands.climberOffCommand);
+    // here for intake subsystem :)
+    systemCheck.leftBumper().onTrue(commands.feederFwdCommand);
+    systemCheck.leftBumper().onFalse(commands.feederOffCommand);
+    systemCheck.y().onTrue(commands.feederRevCommand);
+    systemCheck.y().onFalse(commands.feederOffCommand);
+    // Climber
+    systemCheck.rightTrigger().onTrue(commands.climberUpCommand);
+    systemCheck.rightTrigger().onFalse(commands.climberOffCommand);
+    systemCheck.leftTrigger().onTrue(commands.climberDownCommand);
+    systemCheck.leftTrigger().onFalse(commands.climberOffCommand);
 
-      operator.a().onTrue(commands.elevatorUpCommand);
-      operator.a().onFalse(commands.elevatorOffCommand);
-      operator.b().onTrue(commands.elevatorDownCommand);
-      operator.b().onFalse(commands.elevatorOffCommand);
+    systemCheck.a().onTrue(commands.elevatorUpCommand);
+    systemCheck.a().onFalse(commands.elevatorOffCommand);
+    systemCheck.b().onTrue(commands.elevatorDownCommand);
+    systemCheck.b().onFalse(commands.elevatorOffCommand);
 
-      driver.a().onTrue(commands.shootCommand);
+    systemCheck.povDown().onTrue(commands.shootCommand);
 
-      // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
-      // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
+    // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
+    // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
 
-      // //path
+    // NORMAL DRIVE MODE BINDINGS
 
-    } else {
-      // NORMAL DRIVE MODE BINDINGS
+    operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
 
-      operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
+    // NORMAL DRIVE MODE BINDINGS
 
+    operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
 
-        driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
-        driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
+    driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
+    driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
 
-      // driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
-      // "Fastest" auto
-      // driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto"
-      // auto
-      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //"Auto"
-      // autog
-      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
-      // "Fastest" auto
-    }
+    // driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
+    // "Fastest" auto
+    // driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto"
+    // auto
+    // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //"Auto"
+    // autog
+    // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
+    // "Fastest" auto
 
     drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrainSubsystem
