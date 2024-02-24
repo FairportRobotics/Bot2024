@@ -21,15 +21,12 @@ public class AutoScoreCommands {
         CommandSwerveDrivetrain _commandSwerveDrivetrain;
 
         Pose2d _roboSpeakerPose2d;
-        Pose2d  _roboAmpPose2d;
+        Pose2d _roboAmpPose2d;
         PathConstraints _constraints;
-
 
         public Command scoreSpeakerCommand;
 
-
         public Command scoreAmpCommand;
-
 
         public AutoScoreCommands(ScoringSubsystem scoringSubsystem, ClimberSubsystem climberSubsystem,
                         IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain commandSwerveDrivetrain) {
@@ -41,39 +38,39 @@ public class AutoScoreCommands {
                 _roboAmpPose2d = commandSwerveDrivetrain.roboAmpPose2d;
                 _constraints = commandSwerveDrivetrain.constraints;
 
-
                 scoreSpeakerCommand = Commands.sequence(
-                        Commands.parallel(new IntakeNoteToFeederCommand(_intakeSubsystem), new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome), 
-                        AutoBuilder.pathfindToPose(
-                        _roboSpeakerPose2d,
-                        _constraints,
-                        0.0, // Goal end velocity in meters/sec
-                        0.0 // Rotation delay distance in meters. This is how far the robot should travel
-                            // before attempting to rotate.
-                        )),  
-                        Commands.parallel(new ShooterOnCommand(_scoringSubsystem, 1.0),
-                                        new FeederOnCommand(_intakeSubsystem, 0.15)),
-                        new WaitCommand(1.0),
-                        Commands.parallel(new ShooterOffCommand(_scoringSubsystem),
-                                        new FeederOffCommand(_intakeSubsystem)));
-
+                                Commands.parallel(new IntakeNoteToFeederCommand(_intakeSubsystem),
+                                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome),
+                                                AutoBuilder.pathfindToPose(
+                                                                _roboSpeakerPose2d,
+                                                                _constraints,
+                                                                0.0, // Goal end velocity in meters/sec
+                                                                0.0 // Rotation delay distance in meters. This is how
+                                                                    // far the robot should travel
+                                                                    // before attempting to rotate.
+                                                )),
+                                new ShooterOnCommand(_scoringSubsystem, 1.0),
+                                new FeederOnCommand(_intakeSubsystem, 0.15),
+                                new WaitCommand(1.0),
+                                Commands.parallel(new ShooterOffCommand(_scoringSubsystem),
+                                                new FeederOffCommand(_intakeSubsystem)));
 
                 scoreAmpCommand = Commands.sequence(
-                        Commands.parallel(new IntakeNoteToFeederCommand(intakeSubsystem), new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome),
-                        AutoBuilder.pathfindToPose(
-                        _roboAmpPose2d,
-                        _constraints,
-                        0.0, // Goal end velocity in meters/sec
-                        0.0 // Rotation delay distance in meters. This is how far the robot should travel
-                            // before attempting to rotate.
-                        )),
-                        new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-                        new FeederOnCommand(intakeSubsystem, -1.0),
-                        new WaitCommand(0.5),
-                        new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
-
+                                Commands.parallel(new IntakeNoteToFeederCommand(intakeSubsystem),
+                                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome),
+                                                AutoBuilder.pathfindToPose(
+                                                                _roboAmpPose2d,
+                                                                _constraints,
+                                                                0.0, // Goal end velocity in meters/sec
+                                                                0.0 // Rotation delay distance in meters. This is how
+                                                                    // far the robot should travel
+                                                                    // before attempting to rotate.
+                                                )),
+                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+                                new FeederOnCommand(intakeSubsystem, -1.0),
+                                new WaitCommand(0.5),
+                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
         }
-
 
 }
