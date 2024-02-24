@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ScoringSubsystem;
 
@@ -21,7 +22,13 @@ public class ShooterOnCommand extends Command{
     }
 
     @Override
+    public void execute() {
+        SmartDashboard.putNumber("Shooter Bot speed", _scoringSubsystem.shooterBottomMotor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter Top speed", _scoringSubsystem.shooterTopMotor.getVelocity().getValueAsDouble());
+    }
+
+    @Override
     public boolean isFinished() {
-        return _scoringSubsystem.shooterBottomMotor.getVelocity().getValue() >= 200 && _scoringSubsystem.shooterTopMotor.getVelocity().getValue() >= 200;
+        return _scoringSubsystem.shooterBottomMotor.getVelocity().getValue() >= 100 && _scoringSubsystem.shooterTopMotor.getVelocity().getValue() >= 100;
     }
 }

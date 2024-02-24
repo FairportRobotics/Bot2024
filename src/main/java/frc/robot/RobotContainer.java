@@ -18,12 +18,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoScoreCommands;
@@ -93,6 +91,7 @@ public class RobotContainer {
     public Command intakeOffCommand = new IntakeOffCommand(intakeSubsystem);
 
     public Command feederFwdCommand = new FeederOnCommand(intakeSubsystem, 0.25);
+    public Command feederFwdCommandSlow = new FeederOnCommand(intakeSubsystem, 0.1);
     public Command feederOffCommand = new FeederOffCommand(intakeSubsystem);
     public Command feederRevCommand = new FeederOnCommand(intakeSubsystem, -0.15);
 
@@ -229,6 +228,8 @@ public class RobotContainer {
     systemCheck.b().onFalse(commands.elevatorOffCommand);
 
     systemCheck.povDown().onTrue(commands.shootCommand);
+    operator.povUp().onTrue(commands.feederFwdCommandSlow);
+    operator.povUp().onFalse(commands.feederOffCommand);
 
     // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
     // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
@@ -239,7 +240,7 @@ public class RobotContainer {
 
     // NORMAL DRIVE MODE BINDINGS
 
-    operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
+    //operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
 
     driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
     driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
