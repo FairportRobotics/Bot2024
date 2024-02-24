@@ -14,8 +14,8 @@ public class ElevatorAutoHomeCommand extends Command{
 
     @Override
     public void initialize() {
-        _scoringSubsystem.elevatorLeftMotor.set(-0.5);
-        _scoringSubsystem.elevatorRightMotor.set(-0.5);
+        _scoringSubsystem.elevatorLeftMotor.set(-0.1);
+        _scoringSubsystem.elevatorRightMotor.set(-0.1);
     }
 
     @Override

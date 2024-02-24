@@ -3,14 +3,13 @@ package frc.robot.subsystems;//lol "package" HA AH AHAHAHAGGGG *Cough noise *Cou
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ScoringSubsystem extends SubsystemBase {
 
-    public double rightHomePos = -1.1111;
-    public double leftHomePos = -1.1111;
+    public double rightHomePos = Double.MAX_VALUE;
+    public double leftHomePos = Double.MAX_VALUE;
 
     public TalonFX shooterTopMotor = new TalonFX(Constants.ShooterContants.SHOOTER_TOP_MOTOR_ID);
     public TalonFX shooterBottomMotor = new TalonFX(Constants.ShooterContants.SHOOTER_BOTTOM_MOTOR_ID);

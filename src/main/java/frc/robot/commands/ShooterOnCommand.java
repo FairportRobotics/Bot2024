@@ -22,6 +22,6 @@ public class ShooterOnCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return true;
+        return _scoringSubsystem.shooterBottomMotor.getVelocity().getValue() >= 200 && _scoringSubsystem.shooterTopMotor.getVelocity().getValue() >= 200;
     }
 }

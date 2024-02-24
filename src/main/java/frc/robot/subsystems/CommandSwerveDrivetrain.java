@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -16,8 +15,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.LimelightHelpers.LimelightResults;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
@@ -41,17 +42,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             3.0, 2.0,
             Units.degreesToRadians(270), Units.degreesToRadians(360));
 
-
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
-
-        getPigeon2().getConfigurator().apply(new MountPoseConfigs() {
-
-        });
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
@@ -59,7 +55,20 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        
+    }
+
+    @Override
+    public void periodic() {
+        Subsystem.super.periodic();
+
+        LimelightResults results = LimelightHelpers.getLatestResults("");
+        Pose2d visionPose = results.targetingResults.getBotPose2d_wpiBlue();
+        if (visionPose.getX() == 0.0){
+            return;
+        }
+
+        double latency = Timer.getFPGATimestamp() - (results.targetingResults.botpose_wpiblue[6]/1000.0);
+        this.addVisionMeasurement(visionPose, latency);
     }
 
     private void startSimThread() {

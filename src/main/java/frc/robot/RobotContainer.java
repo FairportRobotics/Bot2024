@@ -43,9 +43,9 @@ import frc.robot.commands.ShooterOffCommand;
 import frc.robot.commands.ShooterOnCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -236,6 +236,10 @@ public class RobotContainer {
 
       operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
 
+
+        driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
+        driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
+
       // driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
       // "Fastest" auto
       // driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto"
@@ -268,9 +272,6 @@ public class RobotContainer {
     driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative())); // COMMENTED OUT
                                                                                                        // DUE TO BUTTON
                                                                                                        // CONFLICTS
-
-    driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
-    driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
 
     if (Utils.isSimulation()) {
       drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

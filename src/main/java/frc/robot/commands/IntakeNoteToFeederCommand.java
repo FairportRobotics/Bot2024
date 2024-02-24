@@ -18,10 +18,10 @@ public class IntakeNoteToFeederCommand extends Command {
 
     @Override
     public void initialize() {
-        _intakeSubsystem.feederMotor.set(-1.5);
+        _intakeSubsystem.feederMotor.set(0.25);
 
-        _intakeSubsystem.intakeLeftMotor.set(ControlMode.PercentOutput, -1.5);
-        _intakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, -1.5);
+        _intakeSubsystem.intakeLeftMotor.set(ControlMode.PercentOutput, 1.0);
+        _intakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, 1.0);
     }
 
     @Override
@@ -31,9 +31,9 @@ public class IntakeNoteToFeederCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        _intakeSubsystem.feederMotor.set(-1.0);
+        _intakeSubsystem.feederMotor.set(0);
 
-        _intakeSubsystem.intakeLeftMotor.set(ControlMode.PercentOutput, -1.0);
-        _intakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, -1.0);
+        _intakeSubsystem.intakeLeftMotor.set(ControlMode.PercentOutput, 0);
+        _intakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, 0);
     }
 }
