@@ -1,6 +1,11 @@
 {
   "HALProvider": {
     "Other Devices": {
+      "Pigeon 2 (v6)[17]": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX (v6)[17]": {
         "header": {
           "open": true
@@ -45,10 +50,11 @@
     }
   },
   "NetworkTables": {
-    "Transitory Values": {
-      "open": false
-    },
+    "combined": true,
     "transitory": {
+      "AdvantageKit": {
+        "open": true
+      },
       "PathPlanner": {
         "HotReload": {
           "open": true

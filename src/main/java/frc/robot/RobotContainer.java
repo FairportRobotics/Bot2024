@@ -95,7 +95,7 @@ public class RobotContainer {
     public Command feederOffCommand = new FeederOffCommand(intakeSubsystem);
     public Command feederRevCommand = new FeederOnCommand(intakeSubsystem, -0.15);
 
-    public Command shooterOnCommand = new ShooterOnCommand(scoringSubsystem, 1.0);
+    public Command shooterOnCommand = new ShooterOnCommand(scoringSubsystem, 100);
     public Command shooterOffCommand = new ShooterOffCommand(scoringSubsystem);
 
     public Command elevatorUpCommand = new ElevatorUpCommand(scoringSubsystem, 0.1);
@@ -228,8 +228,6 @@ public class RobotContainer {
     systemCheck.b().onFalse(commands.elevatorOffCommand);
 
     systemCheck.povDown().onTrue(commands.shootCommand);
-    operator.povUp().onTrue(commands.feederFwdCommandSlow);
-    operator.povUp().onFalse(commands.feederOffCommand);
 
     // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
     // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
@@ -237,22 +235,13 @@ public class RobotContainer {
     // NORMAL DRIVE MODE BINDINGS
 
     operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
+    operator.povUp().onTrue(commands.feederFwdCommandSlow);
+    operator.povUp().onFalse(commands.feederOffCommand);
 
     // NORMAL DRIVE MODE BINDINGS
 
-    //operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
-
     driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
     driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
-
-    // driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
-    // "Fastest" auto
-    // driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto"
-    // auto
-    // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //"Auto"
-    // autog
-    // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
-    // "Fastest" auto
 
     drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrainSubsystem
@@ -272,13 +261,11 @@ public class RobotContainer {
 
     driver.leftTrigger().whileTrue(drivetrainSubsystem.applyRequest(() -> brake));
 
-    // reset the field-centric heading on left bumper press
-    driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative())); // COMMENTED OUT
-                                                                                                       // DUE TO BUTTON
-                                                                                                       // CONFLICTS
+    // reset the field-centric heading
+    driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));
 
     if (Utils.isSimulation()) {
-      drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+      drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
     }
     drivetrainSubsystem.registerTelemetry(logger::telemeterize);
   }

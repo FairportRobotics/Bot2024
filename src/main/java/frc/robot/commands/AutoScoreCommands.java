@@ -49,7 +49,7 @@ public class AutoScoreCommands {
                                                                     // far the robot should travel
                                                                     // before attempting to rotate.
                                                 )),
-                                new ShooterOnCommand(_scoringSubsystem, 1.0),
+                                new ShooterOnCommand(_scoringSubsystem, 100),
                                 new FeederOnCommand(_intakeSubsystem, 0.15),
                                 new WaitCommand(1.0),
                                 Commands.parallel(new ShooterOffCommand(_scoringSubsystem),
