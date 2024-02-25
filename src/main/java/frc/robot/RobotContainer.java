@@ -28,7 +28,9 @@ import frc.robot.commands.AutoScoreCommands;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberOffCommand;
 import frc.robot.commands.ClimberUpCommand;
+import frc.robot.commands.ElevatorAutoHomeCommand;
 import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.ElevatorGoToPosCommand;
 import frc.robot.commands.ElevatorOffCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.FeederOffCommand;
@@ -39,6 +41,7 @@ import frc.robot.commands.IntakeOnCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterOffCommand;
 import frc.robot.commands.ShooterOnCommand;
+import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -89,18 +92,23 @@ public class RobotContainer {
     public Command intakeOnCommand = new IntakeOnCommand(intakeSubsystem, 0.7);
     public Command intakeRevCommand = new IntakeOnCommand(intakeSubsystem, -0.7);
     public Command intakeOffCommand = new IntakeOffCommand(intakeSubsystem);
+    public Command intakeNoteToFeeder = new IntakeNoteToFeederCommand(intakeSubsystem);
 
     public Command feederFwdCommand = new FeederOnCommand(intakeSubsystem, 0.25);
     public Command feederFwdCommandSlow = new FeederOnCommand(intakeSubsystem, 0.1);
     public Command feederOffCommand = new FeederOffCommand(intakeSubsystem);
     public Command feederRevCommand = new FeederOnCommand(intakeSubsystem, -0.15);
 
-    public Command shooterOnCommand = new ShooterOnCommand(scoringSubsystem, 100);
+    public Command shooterOnCommand = new ShooterOnCommand(scoringSubsystem, 200);
     public Command shooterOffCommand = new ShooterOffCommand(scoringSubsystem);
 
     public Command elevatorUpCommand = new ElevatorUpCommand(scoringSubsystem, 0.1);
     public Command elevatorDownCommand = new ElevatorDownCommand(scoringSubsystem, 0.1);
     public Command elevatorOffCommand = new ElevatorOffCommand(scoringSubsystem);
+
+    public Command elevatorAutoHome = new ElevatorAutoHomeCommand(scoringSubsystem);
+    public Command elevatorHomeCommand = new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome);
+    public Command elevatorAmpCommand = new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP);
 
     public Command climberUpCommand = new ClimberUpCommand(climberSubsystem, 0.40);
     public Command climberDownCommand = new ClimberDownCommand(climberSubsystem, 0.40);
@@ -222,19 +230,17 @@ public class RobotContainer {
     systemCheck.leftTrigger().onTrue(commands.climberDownCommand);
     systemCheck.leftTrigger().onFalse(commands.climberOffCommand);
 
-    systemCheck.a().onTrue(commands.elevatorUpCommand);
-    systemCheck.a().onFalse(commands.elevatorOffCommand);
-    systemCheck.b().onTrue(commands.elevatorDownCommand);
-    systemCheck.b().onFalse(commands.elevatorOffCommand);
+    systemCheck.a().onTrue(commands.elevatorAmpCommand);
+    systemCheck.b().onTrue(commands.elevatorHomeCommand);
+    systemCheck.back().onTrue(commands.elevatorAutoHome);
 
-    systemCheck.povDown().onTrue(commands.shootCommand);
+    systemCheck.povLeft().onTrue(commands.shootCommand);
+    systemCheck.povUp().onTrue(commands.intakeNoteToFeeder);
 
     // operator.a().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
     // operator.povRight().onTrue(commands.autoScoreCommands.scoreAmpCommand);
 
     // NORMAL DRIVE MODE BINDINGS
-
-    operator.a().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
     operator.povUp().onTrue(commands.feederFwdCommandSlow);
     operator.povUp().onFalse(commands.feederOffCommand);
 
@@ -242,6 +248,8 @@ public class RobotContainer {
 
     driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
     driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
+
+    //scoringSubsystem.setDefaultCommand(commands.elevatorAutoHome);
 
     drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrainSubsystem

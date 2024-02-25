@@ -8,13 +8,23 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
     public TalonFX feederMotor = new TalonFX(Constants.IntakeConstants.FEEDER_MOTOR_ID);
     public DigitalInput feederSensor = new DigitalInput(Constants.IntakeConstants.FEEDER_SENSOR_ID);
+    public DigitalInput shooterSensor = new DigitalInput(Constants.IntakeConstants.SHOOTER_SENSOR_ID);
 
     public TalonSRX intakeLeftMotor = new TalonSRX(Constants.IntakeConstants.INTAKE_LEFT_MOTOR_ID);
 //    public TalonSRX intakeRightMotor = new TalonSRX(Constants.IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
+
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("FEEDER SENSOR", feederSensor.get());
+        SmartDashboard.putBoolean("SHOOTE SENSOR", shooterSensor.get());
+    }
+
 }

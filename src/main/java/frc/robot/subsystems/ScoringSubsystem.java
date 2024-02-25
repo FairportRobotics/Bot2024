@@ -1,13 +1,16 @@
 package frc.robot.subsystems;//lol "package" HA AH AHAHAHAGGGG *Cough noise *Cough noise*5 *Falls down stairs... - Lukas
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.ElevatorAutoHomeCommand;
 
 public class ScoringSubsystem extends SubsystemBase {
 
@@ -22,20 +25,22 @@ public class ScoringSubsystem extends SubsystemBase {
     //DigitalInput toplimitSwitch;
     public DigitalInput bottomlimitSwitch;
 
+    ElevatorAutoHomeCommand autoHomeCommand;
+
     public ScoringSubsystem() {
         //toplimitSwitch = new DigitalInput(8);
         bottomlimitSwitch = new DigitalInput(Constants.ElevatorConstants.ELEVATOR_BOTTOM_SWITCH_ID);
 
         TalonFXConfiguration elevatorMotor1Config = new TalonFXConfiguration();
-        elevatorMotor1Config.Slot0.kP = 24;
-        elevatorMotor1Config.Slot0.kI = 0;
+        elevatorMotor1Config.Slot0.kP = 1;
+        elevatorMotor1Config.Slot0.kI = 1;
         elevatorMotor1Config.Slot0.kD = 0.1;
         elevatorLeftMotor.getConfigurator().apply(elevatorMotor1Config);
         elevatorLeftMotor.setInverted(false);
 
         TalonFXConfiguration elevatorMotor2Config = new TalonFXConfiguration();
-        elevatorMotor2Config.Slot0.kP = 24;
-        elevatorMotor2Config.Slot0.kI = 0;
+        elevatorMotor2Config.Slot0.kP = 1;
+        elevatorMotor2Config.Slot0.kI = 1;
         elevatorMotor2Config.Slot0.kD = 0.1;
         elevatorRightMotor.getConfigurator().apply(elevatorMotor2Config);
         elevatorRightMotor.setInverted(true);
@@ -59,6 +64,18 @@ public class ScoringSubsystem extends SubsystemBase {
         shooterBottomMotor.getConfigurator().apply(shooterTopConfig);
         shooterBottomMotor.setInverted(false);
 
+        autoHomeCommand = new ElevatorAutoHomeCommand(this);
+
+    }
+
+    @Override
+    public void periodic() {
+
+        if(leftHomePos == Double.MAX_VALUE || rightHomePos == Double.MAX_VALUE){
+            autoHomeCommand.schedule();
+        }
+
+        SmartDashboard.putBoolean("Elevator At Bottom", !bottomlimitSwitch.get());
     }
 
 }

@@ -40,32 +40,34 @@ public class AutoScoreCommands {
 
                 scoreSpeakerCommand = Commands.sequence(
                                 Commands.parallel(new IntakeNoteToFeederCommand(_intakeSubsystem),
-                                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome),
-                                                AutoBuilder.pathfindToPose(
-                                                                _roboSpeakerPose2d,
-                                                                _constraints,
-                                                                0.0, // Goal end velocity in meters/sec
-                                                                0.0 // Rotation delay distance in meters. This is how
-                                                                    // far the robot should travel
-                                                                    // before attempting to rotate.
-                                                )),
+                                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome)
+                                                // AutoBuilder.pathfindToPose(
+                                                //                 _roboSpeakerPose2d,
+                                                //                 _constraints,
+                                                //                 0.0, // Goal end velocity in meters/sec
+                                                //                 0.0 // Rotation delay distance in meters. This is how
+                                                //                     // far the robot should travel
+                                                //                     // before attempting to rotate.
+                                                // )),
+                                ),
                                 new ShooterOnCommand(_scoringSubsystem, 100),
-                                new FeederOnCommand(_intakeSubsystem, 0.15),
-                                new WaitCommand(1.0),
+                                new FeederOnCommand(_intakeSubsystem, 1.0),
+                                new WaitCommand(2.0),
                                 Commands.parallel(new ShooterOffCommand(_scoringSubsystem),
                                                 new FeederOffCommand(_intakeSubsystem)));
 
                 scoreAmpCommand = Commands.sequence(
                                 Commands.parallel(new IntakeNoteToFeederCommand(intakeSubsystem),
-                                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome),
-                                                AutoBuilder.pathfindToPose(
-                                                                _roboAmpPose2d,
-                                                                _constraints,
-                                                                0.0, // Goal end velocity in meters/sec
-                                                                0.0 // Rotation delay distance in meters. This is how
-                                                                    // far the robot should travel
-                                                                    // before attempting to rotate.
-                                                )),
+                                                new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome)
+                                                // AutoBuilder.pathfindToPose(
+                                                //                 _roboAmpPose2d,
+                                                //                 _constraints,
+                                                //                 0.0, // Goal end velocity in meters/sec
+                                                //                 0.0 // Rotation delay distance in meters. This is how
+                                                //                     // far the robot should travel
+                                                //                     // before attempting to rotate.
+                                                // )),
+                                ),
                                 new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
                                 new FeederOnCommand(intakeSubsystem, -1.0),
                                 new WaitCommand(0.5),

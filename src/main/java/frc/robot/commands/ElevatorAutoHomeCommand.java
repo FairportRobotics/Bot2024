@@ -20,7 +20,7 @@ public class ElevatorAutoHomeCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return _scoringSubsystem.bottomlimitSwitch.get();
+        return !_scoringSubsystem.bottomlimitSwitch.get();
     }
 
     @Override

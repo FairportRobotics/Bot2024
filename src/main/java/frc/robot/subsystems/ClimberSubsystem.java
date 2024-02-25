@@ -16,7 +16,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public ClimberSubsystem(){
         climberLeftMotor.setInverted(true);
-        climberRightMotor.setInverted(false);
+        climberRightMotor.setInverted(true);
         climberLeftMotor.setNeutralMode(NeutralModeValue.Brake);
         climberRightMotor.setNeutralMode(NeutralModeValue.Brake);
     }
