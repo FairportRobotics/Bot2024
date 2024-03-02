@@ -10,12 +10,13 @@ import frc.robot.subsystems.ScoringSubsystem;
 public class ElevatorGoToPosCommand extends Command {
 
     public enum ElevatorPosition {
+        kNone,
         kHome,
         kAMP,
     }
 
     private ScoringSubsystem _scoringSubsystem;
-    private ElevatorPosition requestPos;
+    private double requestPosRots = Double.MAX_VALUE;
 
     private StatusSignal<Double> leftPosition;
     private StatusSignal<Double> rightPosition;
@@ -29,7 +30,27 @@ public class ElevatorGoToPosCommand extends Command {
     public ElevatorGoToPosCommand(ScoringSubsystem scoringSubsystem, ElevatorPosition pos) {
         _scoringSubsystem = scoringSubsystem;
         addRequirements(_scoringSubsystem);
-        requestPos = pos;
+
+        if (pos == ElevatorPosition.kAMP) {
+            requestPosRots = 10.25;
+        } else {
+            requestPosRots = 0;
+        }
+
+        rightPosition = _scoringSubsystem.elevatorRightMotor.getPosition();
+        leftPosition = _scoringSubsystem.elevatorLeftMotor.getPosition();
+
+        leftPosError = _scoringSubsystem.elevatorLeftMotor.getClosedLoopError();
+        rightPosError = _scoringSubsystem.elevatorRightMotor.getClosedLoopError();
+
+        rightPositionRequest = new PositionVoltage(0).withSlot(0);
+        leftPositionRequest = new PositionVoltage(0).withSlot(0);
+    }
+
+    public ElevatorGoToPosCommand(ScoringSubsystem scoringSubsystem, double pos) {
+        _scoringSubsystem = scoringSubsystem;
+        addRequirements(_scoringSubsystem);
+        requestPosRots = pos;
 
         rightPosition = _scoringSubsystem.elevatorRightMotor.getPosition();
         leftPosition = _scoringSubsystem.elevatorLeftMotor.getPosition();
@@ -44,40 +65,34 @@ public class ElevatorGoToPosCommand extends Command {
     @Override
     public void initialize() {
 
-        if (requestPos == ElevatorPosition.kHome) {
-            _scoringSubsystem.elevatorRightMotor
-                    .setControl(rightPositionRequest.withPosition(_scoringSubsystem.rightHomePos));
-            _scoringSubsystem.elevatorLeftMotor
-                    .setControl(leftPositionRequest.withPosition(_scoringSubsystem.leftHomePos));
-        } else if (requestPos == ElevatorPosition.kAMP) {
-            _scoringSubsystem.elevatorRightMotor
-                    .setControl(rightPositionRequest.withPosition(_scoringSubsystem.rightHomePos + 9));
-            _scoringSubsystem.elevatorRightMotor
-                    .setControl(leftPositionRequest.withPosition(_scoringSubsystem.leftHomePos + 9));
-        }
+        _scoringSubsystem.elevatorLeftMotor
+                .setControl(leftPositionRequest.withPosition(_scoringSubsystem.leftHomePos + requestPosRots));
+        _scoringSubsystem.elevatorRightMotor
+                .setControl(rightPositionRequest.withPosition(_scoringSubsystem.rightHomePos + requestPosRots));
     }
 
     @Override
     public void execute() {
-
-        leftPosError.waitForUpdate(0.1);
-        rightPosError.waitForUpdate(0.1);
-
-        SmartDashboard.putNumber("Elevator Left Error", leftPosError.getValue());
-        SmartDashboard.putNumber("Elevator Right Error", rightPosError.getValue());
     }
 
     @Override
     public boolean isFinished() {
-        leftPosError.waitForUpdate(0.1);
-        rightPosError.waitForUpdate(0.1);
 
-        if (requestPos == ElevatorPosition.kHome) {
+        leftPosError.refresh();
+        rightPosError.refresh();
+
+        if (requestPosRots <= 0) {
             return !_scoringSubsystem.bottomlimitSwitch.get();
-        } else {
-            return (Math.abs(leftPosError.getValue()) <= 0.00001 &&
-                    Math.abs(rightPosError.getValue()) <= 0.00001);
+        } else if (leftPosition.hasUpdated() && rightPosition.hasUpdated()) {
+
+            SmartDashboard.putNumber("Ele Left Pos", leftPosition.getValue());
+            SmartDashboard.putNumber("Ele Right", rightPosition.getValue());
+
+            return (Math.abs(leftPosition.getValue() - (requestPosRots + _scoringSubsystem.leftHomePos)) <= 0.1 ||
+                    Math.abs(rightPosition.getValue() - (requestPosRots + _scoringSubsystem.rightHomePos)) <= 0.1);
         }
+
+        return false;
 
     }
 

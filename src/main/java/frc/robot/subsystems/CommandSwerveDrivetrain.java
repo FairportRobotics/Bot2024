@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
@@ -9,10 +11,16 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -31,11 +39,23 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
+    private NetworkTable llTable = NetworkTableInstance.getDefault().getTable("limelight");
+    private NetworkTableEntry tx = llTable.getEntry("tx");
+    private NetworkTableEntry ty = llTable.getEntry("ty");
+    private NetworkTableEntry ta = llTable.getEntry("ta");
+
+    private NetworkTableEntry tl = llTable.getEntry("tl");
+    private NetworkTableEntry cl = llTable.getEntry("tl");
+
+    private NetworkTableEntry botPose = llTable.getEntry("botpose_wpiblue");
+
     // Since we are using a holonomic drivetrain, the rotation component of this
     // pose
     // represents the goal holonomic rotation
-    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(180.0));// Speaker pos according to pathplanner
-    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(-90.0));// amp pos according to pathplanner
+    public Pose2d roboSpeakerPose2d = new Pose2d(2.11, 7.17, Rotation2d.fromDegrees(180.0));// Speaker pos according to
+                                                                                            // pathplanner
+    public Pose2d roboAmpPose2d = new Pose2d(1.78, 5.41, Rotation2d.fromDegrees(-90.0));// amp pos according to
+                                                                                        // pathplanner
 
     // Create the constraints to use while pathfinding
     public PathConstraints constraints = new PathConstraints(
@@ -61,14 +81,24 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void periodic() {
         Subsystem.super.periodic();
 
-        LimelightResults results = LimelightHelpers.getLatestResults("MasonIsAGoober");
-        Pose2d visionPose = results.targetingResults.getBotPose2d_wpiBlue();
-        if (visionPose.getX() == 0.0){
-            return;
+        if (DriverStation.isAutonomous()) {
+
+            double[] botPoseVals = botPose.getDoubleArray(new double[5]);
+
+            if (botPoseVals[0] == 0.0) {
+                return;
+            }
+
+            Pose2d pose = new Pose2d(botPoseVals[0], botPoseVals[1], Rotation2d.fromDegrees(botPoseVals[5]));
+            double latency = Timer.getFPGATimestamp() - (botPoseVals[6] / 1000.0);
+            this.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 0.5));
+            this.addVisionMeasurement(pose, latency);
+
+
+            Logger.recordOutput("Limelight Pose", pose);
         }
 
-        double latency = Timer.getFPGATimestamp() - (results.targetingResults.botpose_wpiblue[6]/1000.0);
-        this.addVisionMeasurement(visionPose, latency);
+        Logger.recordOutput("Odemetry Pose", getPose());
     }
 
     private void startSimThread() {

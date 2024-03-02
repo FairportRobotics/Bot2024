@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.StatusSignal;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ScoringSubsystem;
 
@@ -28,8 +30,14 @@ public class ElevatorAutoHomeCommand extends Command{
         _scoringSubsystem.elevatorLeftMotor.set(0.0);
         _scoringSubsystem.elevatorRightMotor.set(0.0);
 
-        _scoringSubsystem.leftHomePos = _scoringSubsystem.elevatorLeftMotor.getPosition().getValueAsDouble();
-        _scoringSubsystem.rightHomePos = _scoringSubsystem.elevatorRightMotor.getPosition().getValueAsDouble();
+        StatusSignal<Double> leftPos = _scoringSubsystem.elevatorLeftMotor.getPosition();
+        StatusSignal<Double> rightPos = _scoringSubsystem.elevatorRightMotor.getPosition();
+
+        leftPos.waitForUpdate(1.0);
+        rightPos.waitForUpdate(1.0);
+
+        _scoringSubsystem.leftHomePos = leftPos.getValue();
+        _scoringSubsystem.rightHomePos = rightPos.getValue();
     }
 
 }

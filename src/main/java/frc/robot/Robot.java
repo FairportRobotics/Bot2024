@@ -40,10 +40,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
 
-    Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+    Logger.recordMetadata("FR_Bot2024", "Pittsburgh"); // Set a metadata value
 
     if (isReal()) {
-      // Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+      Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
       pdh = new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
     } else if (isSimulation()) {
@@ -106,9 +106,13 @@ public class Robot extends LoggedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
+    if (m_autonomousCommand != null) {
+    Logger.recordOutput("Auto Command", m_autonomousCommand.getName());
+      m_autonomousCommand.schedule();
+    }
+    else {
+      Logger.recordOutput("Auto Command", "null");
+    }
     // selectedAutoCommand = autoChooser.getSelected();
     // System.out.println("Auto selected: " + selectedAuto);
   }

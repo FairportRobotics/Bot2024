@@ -35,13 +35,17 @@ public class ShooterOnCommand extends Command{
 
     @Override
     public void execute() {
+
+        botVelocity.refresh();
+        topVelocity.refresh();
+
         SmartDashboard.putNumber("Shooter Bot speed", botVelocity.getValue());
         SmartDashboard.putNumber("Shooter Top speed", topVelocity.getValue());
     }
 
     @Override
     public boolean isFinished() {
-        return botVelocity.getValue() >= speed && topVelocity.getValue() >= speed;
+        return botVelocity.getValue() >= speed || topVelocity.getValue() >= speed;
     }
 
     @Override

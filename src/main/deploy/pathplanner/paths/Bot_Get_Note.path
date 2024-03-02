@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.45,
-        "y": 5.55
+        "x": 0.8434101242722214,
+        "y": 4.233759582273263
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.45,
-        "y": 6.55
+        "x": 1.834145896535262,
+        "y": 4.187287077763193
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.45,
-        "y": 7.0
+        "x": 2.6000261515123446,
+        "y": 4.100472197614478
       },
       "prevControl": {
-        "x": 1.45,
-        "y": 6.0
+        "x": 1.3619169264305495,
+        "y": 3.9344515018755963
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Bot_Two_Note",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

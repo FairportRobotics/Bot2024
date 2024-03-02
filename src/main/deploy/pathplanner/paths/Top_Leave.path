@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.78,
-        "y": 5.41
+        "x": 1.1855877362109182,
+        "y": 6.984774305739295
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.78,
-        "y": 5.433421673091563
+        "x": 2.303621724960813,
+        "y": 6.984774305739295
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.7824530941501242,
-        "y": 5.410406484151056
+        "x": 6.727614634265727,
+        "y": 6.984774305739295
       },
       "prevControl": {
-        "x": 1.7824530941501242,
-        "y": 5.410406484151056
+        "x": 6.090944026809602,
+        "y": 6.984774305739295
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 30.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -49,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Top_One_Note",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
