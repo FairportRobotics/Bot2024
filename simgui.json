@@ -59,6 +59,24 @@
     }
   },
   "NetworkTables": {
+    "AdvantageKit": {
+      "RealOutputs": {
+        "open": true
+      },
+      "open": true
+    },
+    "Drive": {
+      "open": true
+    },
+    "FMSInfo": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "SendableChooser[0]": {
+        "open": true
+      },
+      "open": true
+    },
     "combined": true,
     "transitory": {
       "AdvantageKit": {

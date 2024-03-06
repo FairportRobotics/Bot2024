@@ -83,7 +83,7 @@ public class ScoringSubsystem extends SubsystemBase {
         shooterBotConfig.Slot0.kP = 1; // An error of 1 rps results in 0.11 V output
         shooterBotConfig.Slot0.kI = 0; // no output for integrated error
         shooterBotConfig.Slot0.kD = 0; // no output for error derivative
-        shooterBottomMotor.getConfigurator().apply(shooterTopConfig);
+        shooterBottomMotor.getConfigurator().apply(shooterBotConfig);
         shooterBottomMotor.setInverted(false);
         shooterBotSpeed = shooterBottomMotor.getVelocity();
         shooterBotSpeed.setUpdateFrequency(50);
