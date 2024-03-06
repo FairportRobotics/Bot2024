@@ -30,6 +30,8 @@ public class Robot extends LoggedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private PowerDistribution pdh;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -38,12 +40,12 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
 
-    Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+    Logger.recordMetadata("FR_Bot2024", "Pittsburgh"); // Set a metadata value
 
     if (isReal()) {
-      //Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+      Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-      new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+      pdh = new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
     } else if (isSimulation()) {
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     } else {
@@ -105,13 +107,33 @@ public class Robot extends LoggedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
+    Logger.recordOutput("Auto Command", m_autonomousCommand.getName());
       m_autonomousCommand.schedule();
     }
+    else {
+      Logger.recordOutput("Auto Command", "null");
+    }
+    // selectedAutoCommand = autoChooser.getSelected();
+    // System.out.println("Auto selected: " + selectedAuto);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // switch (selectedAuto) {
+    //   case "Fastest":
+    //     // Put custom auto code here
+    //     break;
+    //   case "Auto":
+    //     break;
+    //   case "Random auto":
+    //     break;
+    //   case "5 note auto":
+    //     break;
+    //   default:
+    //     // Put default auto code here
+    //     break;
+    // }
   }
 
   @Override

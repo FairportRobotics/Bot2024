@@ -14,8 +14,8 @@ public class ShooterOffCommand extends Command{
 
     @Override
     public void initialize() {
-        _scoringSubsystem.shooterLeftMotor.set(0);
-        _scoringSubsystem.shooterRightMotor.set(0);
+        _scoringSubsystem.shooterTopMotor.set(0);
+        _scoringSubsystem.shooterBottomMotor.set(0);
     }
 
     @Override

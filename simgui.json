@@ -1,10 +1,18 @@
 {
   "HALProvider": {
     "Other Devices": {
+      "Pigeon 2 (v6)[17]": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX (v6)[17]": {
         "header": {
           "open": true
         }
+      },
+      "window": {
+        "visible": false
       }
     }
   },
@@ -17,16 +25,67 @@
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
-      "/SmartDashboard/SendableChooser[0]": "String Chooser"
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser"
+    },
+    "windows": {
+      "/Pose": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
+    "AdvantageKit": {
+      "RealOutputs": {
+        "open": true
+      },
+      "open": true
+    },
+    "Drive": {
+      "open": true
+    },
+    "FMSInfo": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "SendableChooser[0]": {
+        "open": true
+      },
+      "open": true
+    },
+    "combined": true,
     "transitory": {
+      "AdvantageKit": {
+        "open": true
+      },
       "PathPlanner": {
         "HotReload": {
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },

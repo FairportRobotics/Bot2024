@@ -4,28 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.commands.ClimberDownCommand;
-import frc.robot.commands.ClimberOffCommand;
-import frc.robot.commands.ClimberUpCommand;
-import frc.robot.commands.ElevatorDownCommand;
-import frc.robot.commands.ElevatorOffCommand;
-import frc.robot.commands.ElevatorUpCommand;
-import frc.robot.commands.FeederOffCommand;
-import frc.robot.commands.FeederOnCommand;
-import frc.robot.commands.IntakeNoteToFeederCommand;
-import frc.robot.commands.IntakeOffCommand;
-import frc.robot.commands.IntakeOnCommand;
-import frc.robot.commands.ShooterOffCommand;
-import frc.robot.commands.ShooterOnCommand;
-import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,11 +21,28 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.ScoringSubsystem;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimberDownCommand;
+import frc.robot.commands.ClimberGoToPosCommand;
+import frc.robot.commands.ClimberOffCommand;
+import frc.robot.commands.ClimberUpCommand;
+import frc.robot.commands.ElevatorGoToPosCommand;
+import frc.robot.commands.FeederOffCommand;
+import frc.robot.commands.FeederOnCommand;
+import frc.robot.commands.FeederRotateCommand;
+import frc.robot.commands.IntakeNoteToFeederCommand;
+import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ClimberGoToPosCommand.ClimberPos;
+import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ScoringSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -50,18 +54,20 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private double MaxSpeed = 6; // 6 meters per second desired top speed
+
+  private double MaxSpeed = 4; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   // The robot's subsystems and commands are defined here...
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController operator = new CommandXboxController(
-      Constants.OperatorConstants.kOperatiorControllerPort); // operator SHOULD BE ON 1 BUT CONFLICTS
-  // IN SIM
+      Constants.OperatorConstants.kOperatorControllerPort);
   private final CommandXboxController driver = new CommandXboxController(
       Constants.OperatorConstants.kDriverControllerPort); // driver
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  // private final CommandXboxController systemCheck = new CommandXboxController(
+  // Constants.OperatorConstants.kSystemCheckControllerPort); // systemCheck
+
+  private final CommandSwerveDrivetrain drivetrainSubsystem = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -71,42 +77,18 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  private final ScoringSubsystem Score = new ScoringSubsystem();
-  private final IntakeSubsystem Intake = new IntakeSubsystem();
-  private final ClimberSubsystem climb = new ClimberSubsystem();
+  private final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
-  private final SendableChooser<Boolean> bindingChooser = new SendableChooser<Boolean>();
-
-  public class Commands {
-    public Command intakeOnCommand = new IntakeOnCommand(Intake, 0.3);
-    public Command intakeOffCommand = new IntakeOffCommand(Intake);
-
-    public Command feederOnCommand = new FeederOnCommand(Intake, 0.25);
-    public Command feederOffCommand = new FeederOffCommand(Intake);
-
-    public Command shooterOnCommand = new ShooterOnCommand(Score, 0.75);
-    public Command shooterOffCommand = new ShooterOffCommand(Score);
-
-    public Command elevatorUpCommand = new ElevatorUpCommand(Score, 0.1);
-    public Command elevatorDownCommand = new ElevatorDownCommand(Score, 0.1);
-    public Command elevatorOffCommand = new ElevatorOffCommand(Score);
-
-    public Command climberUpCommand = new ClimberUpCommand(climb, 0.75);
-    public Command climberDownCommand = new ClimberDownCommand(climb, 0.75);
-    public Command climberOffCommand = new ClimberOffCommand(climb);
-  }
-
-  Commands commands = new Commands();
+  public SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-    final Field2d field;
-
-    field = new Field2d();
-    SmartDashboard.putData("Field", field);
+    final Field2d field = new Field2d();
 
     // Logging callback for current robot pose
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
@@ -126,15 +108,42 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-    NamedCommands.registerCommand("Shoot", null);// Register Named Commands
+    NamedCommands.registerCommand("ShootCommand", new ShootCommand(scoringSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("IntakeCommand", new IntakeNoteToFeederCommand(intakeSubsystem));
 
-    bindingChooser.addOption("System Check", true);
-    bindingChooser.setDefaultOption("Match", false);
+    AutoBuilder.configureHolonomic(
+        drivetrainSubsystem::getPose, // Robot pose supplier
+        drivetrainSubsystem::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        drivetrainSubsystem::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        drivetrainSubsystem::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
+                                         // Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    SmartDashboard.putData(bindingChooser);
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        drivetrainSubsystem // Reference to this subsystem to set requirements
+    );
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData(autoChooser);
 
     configureBindings();
-
   }
 
   /**
@@ -153,67 +162,96 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    //if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
-      if (true) {
-      // SYSTEM CHECK BINDINGS
 
-      // here for Scoring subsystem :) change if too low or high
-      operator.x().onTrue(commands.shooterOnCommand);
-      operator.x().onFalse(commands.shooterOffCommand);
+    boolean isProd = false;
+    // if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
+    // SYSTEM CHECK BINDINGS
+    // here for Scoring subsystem :) change if too low or high
+    if (isProd) {
+      // operator.x().onTrue(commands.shooterOnCommand);
+      // operator.x().onFalse(commands.shooterOffCommand);
+      // operator.rightBumper().onTrue(commands.intakeOnCommand);
+      // operator.rightBumper().onFalse(commands.intakeOffCommand);
+      // operator.povDown().onTrue(commands.intakeRevCommand);
+      // operator.povDown().onFalse(commands.intakeOffCommand);
+      // // operator intake subsystem :)
+      // operator.leftBumper().onTrue(commands.feederFwdCommand);
+      // operator.leftBumper().onFalse(commands.feederOffCommand);
+      // operator.y().onTrue(commands.feederRevCommand);
+      // operator.y().onFalse(commands.feederOffCommand);
+      // // operator
+      // operator.rightTrigger().onTrue(commands.climberUpCommand);
+      // operator.rightTrigger().onFalse(commands.climberOffCommand);
+      // operator.leftTrigger().onTrue(commands.climberDownCommand);
+      // operator.leftTrigger().onFalse(commands.climberOffCommand);
+      // operator.a().onTrue(commands.elevatorAmpCommand);
+      // operator.b().onTrue(commands.elevatorHomeCommand);
 
-      operator.rightBumper().onTrue(commands.intakeOnCommand);
-      operator.rightBumper().onFalse(commands.intakeOffCommand);
-      // here for intake subsystem :)
-      operator.leftBumper().onTrue(commands.feederOnCommand);
-      operator.leftBumper().onFalse(commands.feederOffCommand);
-      // Climber
-      operator.rightTrigger().onTrue(commands.climberUpCommand);
-      operator.rightTrigger().onFalse(commands.climberOffCommand);
-      operator.leftTrigger().onTrue(commands.climberDownCommand);
-      operator.leftTrigger().onFalse(commands.climberOffCommand);
-
-      operator.a().onTrue(commands.elevatorUpCommand);
-      operator.a().onFalse(commands.elevatorOffCommand);
-      operator.b().onTrue(commands.elevatorDownCommand);
-      operator.b().onFalse(commands.elevatorOffCommand);
-
-      // //path
-
-      // reset the field-centric heading on left bumper press
-      // operator.x().onTrue(drivetrain.runOnce(() ->
-      // drivetrain.seedFieldRelative())); //COMMENTED OUT DUE TO BUTTON CONFLICTS
+      // operator.povLeft().onTrue(commands.shootCommand);
+      // operator.povUp().onTrue(commands.intakeNoteToFeeder);
+      // operator.povRight().onTrue(commands.feederRotate);
     } else {
-      // NORMAL DRIVE MODE BINDINGS
+      operator.a().onTrue(Commands.sequence(
+        new FeederRotateCommand(intakeSubsystem, -1),
+        new ElevatorGoToPosCommand(scoringSubsystem, 2),
+        new FeederRotateCommand(intakeSubsystem, -0.85),
+        new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+        Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
 
-      operator.a().onTrue(new IntakeNoteToFeederCommand(Intake));
+      operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
-      driver.povDown().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); // "Fastest" auto
-      driver.povUp().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); // "Auto" auto
-      // driver.povRight().onTrue(CommandSwerveDrivetrain.autoAutoCommand()); //
-      // "Auto" autog
-      // driver.povLeft().onTrue(CommandSwerveDrivetrain.fastestAutoCommand()); //
-      // "Fastest" auto
+      // operator.x().onTrue(commands.intakeRevCommand);
+      // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,
+      // commands.feederOffCommand));
+
+      operator.rightBumper().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
+
+      operator.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
+      operator.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
+
+      operator.leftTrigger().onTrue(new ClimberDownCommand(climberSubsystem, 0.3));
+      operator.leftTrigger().onFalse(new ClimberOffCommand(climberSubsystem));
+
+      operator.rightTrigger().onTrue(new ClimberUpCommand(climberSubsystem, 0.3));
+      operator.rightTrigger().onFalse(new ClimberOffCommand(climberSubsystem));
+
+      operator.y().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
+
+      //operator.x().onTrue(Commands.parallel(new IntakeOnCommand(intakeSubsystem, -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
+      //operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
+
+      operator.povUp().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
+      operator.povDown().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
     }
 
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * MaxSpeed) // Drive
-                                                                                                                         // forward
-                                                                                                                         // with
-            // negative Y (forward)
-            .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * MaxSpeed) // Drive left with negative X
-                                                                                          // (left)
-            .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * MaxAngularRate) // Drive
-                                                                                                       // counterclockwise
-                                                                                                       // with negative
-                                                                                                       // X (left)
-        ));
+    // driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
+    // driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
 
-    driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrainSubsystem
+            .applyRequest(() -> drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * MaxSpeed) // Drive
+                // forward
+                // with
+                // negative Y (forward)
+                .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * MaxSpeed) // Drive left with
+                                                                                              // negative X
+                                                                                              // (left)
+                .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * MaxAngularRate) // Drive
+                                                                                                           // counterclockwise
+                                                                                                           // with
+                                                                                                           // negative
+                                                                                                           // X (left)
+            ));
+
+    driver.leftTrigger().whileTrue(drivetrainSubsystem.applyRequest(() -> brake));
+
+    // reset the field-centric heading
+    driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));
 
     if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+      drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
     }
-    drivetrain.registerTelemetry(logger::telemeterize);
+    drivetrainSubsystem.registerTelemetry(logger::telemeterize);
   }
 
   /**
@@ -223,6 +261,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return CommandSwerveDrivetrain.autoAutoCommand();
+    return autoChooser.getSelected();
   }
 }
