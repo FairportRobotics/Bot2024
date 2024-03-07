@@ -38,6 +38,8 @@ public class ScoringSubsystem extends SubsystemBase {
 
     ElevatorAutoHomeCommand autoHomeCommand;
 
+    public boolean autoHome = false;
+
     public ScoringSubsystem() {
         //toplimitSwitch = new DigitalInput(8);
         bottomlimitSwitch = new DigitalInput(Constants.ElevatorConstants.ELEVATOR_BOTTOM_SWITCH_ID);
@@ -89,15 +91,31 @@ public class ScoringSubsystem extends SubsystemBase {
         shooterBotSpeed.setUpdateFrequency(50);
         shooterBottomMotor.optimizeBusUtilization();
 
-        autoHomeCommand = new ElevatorAutoHomeCommand(this);
-
+        //autoHomeCommand = new ElevatorAutoHomeCommand(this);
     }
 
     @Override
     public void periodic() {
+//        if(leftHomePos == Double.MAX_VALUE || rightHomePos == Double.MAX_VALUE){
+        if (!autoHome){
+            
+            this.elevatorLeftMotor.set(-0.1);
+            this.elevatorRightMotor.set(-0.1);
+            
+            if (!this.bottomlimitSwitch.get()) {
+                this.elevatorLeftMotor.set(0.0);
+                this.elevatorRightMotor.set(0.0);
+    
+                StatusSignal<Double> leftPos = elevatorLeftMotor.getPosition();
+                StatusSignal<Double> rightPos = elevatorRightMotor.getPosition();
 
-        if(leftHomePos == Double.MAX_VALUE || rightHomePos == Double.MAX_VALUE){
-            autoHomeCommand.schedule();
+                leftPos.waitForUpdate(1.0);
+                rightPos.waitForUpdate(1.0);
+        
+                leftHomePos = leftPos.getValue();
+                rightHomePos = rightPos.getValue();
+                autoHome = true;
+            }
         }
 
         Logger.recordOutput("Elevator At Bottom", !bottomlimitSwitch.get());
