@@ -38,8 +38,6 @@ public class ScoringSubsystem extends SubsystemBase {
 
     ElevatorAutoHomeCommand autoHomeCommand;
 
-    public boolean autoHome = false;
-
     public ScoringSubsystem() {
         //toplimitSwitch = new DigitalInput(8);
         bottomlimitSwitch = new DigitalInput(Constants.ElevatorConstants.ELEVATOR_BOTTOM_SWITCH_ID);
@@ -96,8 +94,7 @@ public class ScoringSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        if(leftHomePos == Double.MAX_VALUE || rightHomePos == Double.MAX_VALUE){
-        if (!autoHome){
+        if(leftHomePos == Double.MAX_VALUE || rightHomePos == Double.MAX_VALUE){
             
             this.elevatorLeftMotor.set(-0.1);
             this.elevatorRightMotor.set(-0.1);
@@ -114,7 +111,6 @@ public class ScoringSubsystem extends SubsystemBase {
         
                 leftHomePos = leftPos.getValue();
                 rightHomePos = rightPos.getValue();
-                autoHome = true;
             }
         }
 
