@@ -220,7 +220,7 @@ public class RobotContainer {
 
       //operator.x().onTrue(Commands.parallel(new IntakeOnCommand(intakeSubsystem, -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
       //operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
-      operator.start().onTrue(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
+      operator.x().onTrue(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
 
       operator.povUp().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
       operator.povDown().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kDown));
