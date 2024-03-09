@@ -194,10 +194,10 @@ public class RobotContainer {
     } else {
       operator.a().onTrue(Commands.sequence(
         new FeederRotateCommand(intakeSubsystem, -1),
-        new ElevatorGoToPosCommand(scoringSubsystem, 2),
+        new ElevatorGoToPosCommand(scoringSubsystem, 3),
         new FeederRotateCommand(intakeSubsystem, -0.85),
         new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-        Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
+        Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 0.75))));
 
       operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
@@ -220,7 +220,7 @@ public class RobotContainer {
 
       //operator.x().onTrue(Commands.parallel(new IntakeOnCommand(intakeSubsystem, -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
       //operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
-      operator.x().onTrue(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
+      operator.x().onTrue(Commands.sequence(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
 
       operator.povUp().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
       operator.povDown().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kDown));
