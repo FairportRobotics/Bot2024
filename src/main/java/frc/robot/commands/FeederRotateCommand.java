@@ -1,6 +1,8 @@
 
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -33,19 +35,19 @@ public class FeederRotateCommand extends Command {
         feederPos.waitForUpdate(0.1);
         startingPos = feederPos.getValue();
         _intakeSubsystem.feederMotor.setControl(posRequest.withPosition(rotations + startingPos));
+        Logger.recordOutput("Feeder Request Pos", rotations + startingPos);
     }
 
     @Override
     public void execute() {
-
-        SmartDashboard.putNumber("FEEDER POS", feederPos.getValue());
+        Logger.recordOutput("Feeder Position", feederPos.refresh().getValue());
     }
 
     @Override
     public boolean isFinished() {
         feederPos.refresh();
 
-        SmartDashboard.putNumber("Feeder Err", Math.abs(feederPos.getValue() - (rotations + startingPos)));
+        Logger.recordOutput("Feeder Error",  Math.abs(feederPos.getValue() - (rotations + startingPos)));
 
         if (feederPos.hasUpdated()) {
             return Math.abs(feederPos.getValue() - (rotations + startingPos)) <= 0.1;
