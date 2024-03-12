@@ -16,7 +16,7 @@ public class ShootCommand extends SequentialCommandGroup {
 
         // addRequirements(scoringSubsystem);
 
-        addCommands(Commands.parallel(new FeederRotateCommand(intakeSubsystem, -1.5), new ShooterOnCommand(scoringSubsystem, 95)),
+        addCommands(Commands.parallel(new FeederRotateCommand(intakeSubsystem, -1.5), new ShooterOnCommand(scoringSubsystem, 90)),
                 new FeederOnCommand(intakeSubsystem, 1.0),
                 new WaitCommand(0.8),
                 new ShooterOffCommand(scoringSubsystem),

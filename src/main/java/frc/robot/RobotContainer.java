@@ -195,7 +195,7 @@ public class RobotContainer {
       operator.a().onTrue(Commands.sequence(
         new FeederRotateCommand(intakeSubsystem, -1),
         new ElevatorGoToPosCommand(scoringSubsystem, 3),
-        new FeederRotateCommand(intakeSubsystem, -0.85),
+        new FeederRotateCommand(intakeSubsystem, -1),
         new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
         Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 0.75))));
 
