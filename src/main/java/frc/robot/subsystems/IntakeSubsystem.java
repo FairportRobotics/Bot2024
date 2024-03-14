@@ -53,7 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
         //SmartDashboard.putBoolean("FEEDER SENSOR", feederSensor.get());
         SmartDashboard.putBoolean("NOTE ACQUIRED", !shooterSensor.get());
 
-        Logger.recordOutput("Feeder Pos", feederPos.refresh().getValue());
+        Logger.recordOutput("Feeder Position", feederPos.refresh().getValue());
         Logger.recordOutput("Note Acquired", !shooterSensor.get());
     }
 

@@ -38,10 +38,6 @@ public class FeederRotateCommand extends Command {
         Logger.recordOutput("Feeder Request Pos", rotations + startingPos);
     }
 
-    @Override
-    public void execute() {
-        Logger.recordOutput("Feeder Position", feederPos.refresh().getValue());
-    }
 
     @Override
     public boolean isFinished() {

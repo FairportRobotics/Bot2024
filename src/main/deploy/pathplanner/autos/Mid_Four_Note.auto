@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Init_Point"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "ShootCommand"

@@ -110,7 +110,7 @@ public class RobotContainer {
     });
 
     NamedCommands.registerCommand("ShootCommand", new ShootCommand(scoringSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("IntakeCommand", new IntakeNoteToFeederCommand(intakeSubsystem));
+    NamedCommands.registerCommand("IntakeCommand", Commands.sequence(new IntakeNoteToFeederCommand(intakeSubsystem),new FeederRotateCommand(intakeSubsystem, -0.5)));
 
     AutoBuilder.configureHolonomic(
         drivetrainSubsystem::getPose, // Robot pose supplier
@@ -119,7 +119,7 @@ public class RobotContainer {
         drivetrainSubsystem::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                          // Constants class
-            new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(1.25, 0.0, 0.1), // Translation PID constants
             new PIDConstants(1.0, 0.0, 0.25), // Rotation PID constants
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
@@ -205,7 +205,7 @@ public class RobotContainer {
       // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,
       // commands.feederOffCommand));
 
-      operator.rightBumper().onTrue(new IntakeNoteToFeederCommand(intakeSubsystem));
+      operator.rightBumper().onTrue(Commands.sequence(new IntakeNoteToFeederCommand(intakeSubsystem),new FeederRotateCommand(intakeSubsystem, -0.5)));
 
       operator.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
       operator.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
