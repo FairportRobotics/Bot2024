@@ -26,7 +26,7 @@ public class IntakeNoteToFeederCommand extends Command {
     @Override
     public void initialize() {
         //_intakeSubsystem.feederMotor.setControl(feederRequest.withVelocity(20));
-        _intakeSubsystem.feederMotor.set(0.75);
+        _intakeSubsystem.feederMotor.set(0.65);
 
         _intakeSubsystem.intakeLeftMotor.set(0.5);
         // _intakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, -1.5);

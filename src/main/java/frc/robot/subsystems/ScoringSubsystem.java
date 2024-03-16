@@ -111,6 +111,9 @@ public class ScoringSubsystem extends SubsystemBase {
         
                 leftHomePos = leftPos.getValue();
                 rightHomePos = rightPos.getValue();
+
+                this.elevatorLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+                this.elevatorRightMotor.setNeutralMode(NeutralModeValue.Brake);
             }
         }
 

@@ -37,6 +37,7 @@ import frc.robot.commands.FeederRotateCommand;
 import frc.robot.commands.IntakeNoteToFeederCommand;
 import frc.robot.commands.IntakeOffCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShooterOffCommand;
 import frc.robot.commands.ClimberGoToPosCommand.ClimberPos;
 import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
 import frc.robot.generated.TunerConstants;
@@ -56,7 +57,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
  */
 public class RobotContainer {
 
-  private double MaxSpeed = 4; // 6 meters per second desired top speed
+  private double MaxSpeed = 6; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   // The robot's subsystems and commands are defined here...
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -110,7 +111,8 @@ public class RobotContainer {
     });
 
     NamedCommands.registerCommand("ShootCommand", new ShootCommand(scoringSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("IntakeCommand", Commands.sequence(new IntakeNoteToFeederCommand(intakeSubsystem),new FeederRotateCommand(intakeSubsystem, -0.5)));
+    NamedCommands.registerCommand("IntakeCommand", Commands.sequence(new IntakeNoteToFeederCommand(intakeSubsystem),new WaitCommand(0.2),
+        new FeederRotateCommand(intakeSubsystem, -1)));
 
     AutoBuilder.configureHolonomic(
         drivetrainSubsystem::getPose, // Robot pose supplier
@@ -163,41 +165,19 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-
-    boolean isProd = false;
+    boolean isDriverOnly = false;
     // if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
     // SYSTEM CHECK BINDINGS
     // here for Scoring subsystem :) change if too low or high
-    if (isProd) {
-      // operator.x().onTrue(commands.shooterOnCommand);
-      // operator.x().onFalse(commands.shooterOffCommand);
-      // operator.rightBumper().onTrue(commands.intakeOnCommand);
-      // operator.rightBumper().onFalse(commands.intakeOffCommand);
-      // operator.povDown().onTrue(commands.intakeRevCommand);
-      // operator.povDown().onFalse(commands.intakeOffCommand);
-      // // operator intake subsystem :)
-      // operator.leftBumper().onTrue(commands.feederFwdCommand);
-      // operator.leftBumper().onFalse(commands.feederOffCommand);
-      // operator.y().onTrue(commands.feederRevCommand);
-      // operator.y().onFalse(commands.feederOffCommand);
-      // // operator
-      // operator.rightTrigger().onTrue(commands.climberUpCommand);
-      // operator.rightTrigger().onFalse(commands.climberOffCommand);
-      // operator.leftTrigger().onTrue(commands.climberDownCommand);
-      // operator.leftTrigger().onFalse(commands.climberOffCommand);
-      // operator.a().onTrue(commands.elevatorAmpCommand);
-      // operator.b().onTrue(commands.elevatorHomeCommand);
-
-      // operator.povLeft().onTrue(commands.shootCommand);
-      // operator.povUp().onTrue(commands.intakeNoteToFeeder);
-      // operator.povRight().onTrue(commands.feederRotate);
+    if (isDriverOnly) {
+     
     } else {
       operator.a().onTrue(Commands.sequence(
-        new FeederRotateCommand(intakeSubsystem, -1),
-        new ElevatorGoToPosCommand(scoringSubsystem, 3),
-        new FeederRotateCommand(intakeSubsystem, -1),
-        new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-        Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 0.75))));
+          new FeederRotateCommand(intakeSubsystem, 0),
+          new ElevatorGoToPosCommand(scoringSubsystem, 3),
+          new FeederRotateCommand(intakeSubsystem, -1),
+          new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+          Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 0.75))));
 
       operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
@@ -205,7 +185,8 @@ public class RobotContainer {
       // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,
       // commands.feederOffCommand));
 
-      operator.rightBumper().onTrue(Commands.sequence(new IntakeNoteToFeederCommand(intakeSubsystem),new FeederRotateCommand(intakeSubsystem, -0.5)));
+      operator.rightBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
+          new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
 
       operator.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
       operator.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
@@ -218,9 +199,12 @@ public class RobotContainer {
 
       operator.y().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
 
-      //operator.x().onTrue(Commands.parallel(new IntakeOnCommand(intakeSubsystem, -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
-      //operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
-      operator.x().onTrue(Commands.sequence(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
+      // operator.x().onTrue(Commands.parallel(new IntakeOnCommand(intakeSubsystem,
+      // -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
+      // operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem),
+      // new FeederOffCommand(intakeSubsystem)));
+      operator.x()
+          .onTrue(Commands.sequence(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
 
       operator.povUp().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
       operator.povDown().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kDown));
@@ -231,21 +215,30 @@ public class RobotContainer {
 
     drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrainSubsystem
-            .applyRequest(() -> drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * MaxSpeed) // Drive
-                // forward
-                // with
-                // negative Y (forward)
-                .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * MaxSpeed) // Drive left with
-                                                                                              // negative X
-                                                                                              // (left)
-                .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * MaxAngularRate) // Drive
-                                                                                                           // counterclockwise
-                                                                                                           // with
-                                                                                                           // negative
-                                                                                                           // X (left)
-            ));
+            .applyRequest(() -> {
 
-    driver.leftTrigger().whileTrue(drivetrainSubsystem.applyRequest(() -> brake));
+              double xVelMod = driver.a().getAsBoolean() ? 0.5 : 1;
+              double yVelMod = driver.a().getAsBoolean() ? 0.5 : 1;
+              double rotMod = driver.a().getAsBoolean() ? 0.5 : 1;
+
+              return drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * xVelMod * MaxSpeed) // Drive
+                  // forward
+                  // with
+                  // negative Y (forward)
+                  .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * yVelMod * MaxSpeed) // Drive left
+                                                                                                          // with
+                  // negative X
+                  // (left)
+                  .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * rotMod * MaxAngularRate); // Drive
+              // counterclockwise
+              // with
+              // negative
+              // X
+              // (left)
+            }));
+
+    // driver.leftTrigger().whileTrue(drivetrainSubsystem.applyRequest(() ->
+    // brake));
 
     // reset the field-centric heading
     driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));

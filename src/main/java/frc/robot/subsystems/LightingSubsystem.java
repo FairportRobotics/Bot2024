@@ -4,6 +4,9 @@ package frc.robot.subsystems;
 
 import com.fairportrobotics.frc.poe.controllers.lighting.ArduinoLightingController;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +33,8 @@ public class LightingSubsystem extends SubsystemBase {
             }
         }
     }
+
+    
 
     // Color rgb values have to be a multiple of 5 otherwise the arduino will never
     // get the color correct

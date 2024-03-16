@@ -40,7 +40,7 @@ public class ClimberSubsystem extends SubsystemBase {
         climberRightConfig.Slot0.kI = 1;
         climberRightConfig.Slot0.kD = 0.5;
         climberRightMotor.getConfigurator().apply(climberRightConfig);
-        climberRightMotor.setInverted(true);
+        climberRightMotor.setInverted(false);
         climberRightMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 

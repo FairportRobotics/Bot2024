@@ -49,6 +49,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     private NetworkTableEntry botPose = llTable.getEntry("botpose_wpiblue");
 
+    private NetworkTableEntry tid = llTable.getEntry("tid");
+
     // Since we are using a holonomic drivetrain, the rotation component of this
     // pose
     // represents the goal holonomic rotation
@@ -89,11 +91,43 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 return;
             }
 
+            // double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+
+            // // how many degrees back is your limelight rotated from perfectly vertical?
+            // double limelightMountAngleDegrees = 15.0;
+
+            // // distance from the center of the Limelight lens to the floor
+            // double limelightLensHeightInches = 24.8;
+
+            // // distance from the target to the floor
+            // double goalHeightInches = 0;
+
+            // long currentID = tid.getInteger(-1);
+
+            // if(currentID == 7 || currentID == 8 || currentID == 3 || currentID == 4)//Speaker tags
+            // {
+            //     goalHeightInches = 53.88;
+            // }
+            // else if(currentID == 5 || currentID == 6)//Amp tags
+            // {
+            //     goalHeightInches = 50.13;
+            // }
+            // else if(currentID == 11 || currentID == 12 || currentID == 13 || currentID == 14 || currentID == 15 || currentID == 16)//Stage tags
+            // {
+            //     goalHeightInches = 48.81;
+            // }
+
+            // double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+            // double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+            // // calculate distance
+            // double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)
+            //         / Math.tan(angleToGoalRadians);
+
             Pose2d pose = new Pose2d(botPoseVals[0], botPoseVals[1], Rotation2d.fromDegrees(botPoseVals[5]));
             double latency = Timer.getFPGATimestamp() - (botPoseVals[6] / 1000.0);
-            this.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 0.5));
-            this.addVisionMeasurement(pose, latency);
-
+            this.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 9999999));
+            //this.addVisionMeasurement(pose, latency);
 
             Logger.recordOutput("Limelight Pose", pose);
         }

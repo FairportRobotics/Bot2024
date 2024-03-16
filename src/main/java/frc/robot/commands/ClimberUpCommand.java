@@ -28,16 +28,19 @@ public class ClimberUpCommand extends Command{
         _climberSubsystem.climberRightMotor.set(speed);
     }
 
-    public void stopBot()
+    @Override
+    public void execute()
     {
         rightPosition = _climberSubsystem.climberLeftMotor.getPosition();
         leftPosition = _climberSubsystem.climberRightMotor.getPosition();
-        SmartDashboard.putString("Climber Right position", rightPosition.toString());
-        SmartDashboard.putString("Climber Left position", leftPosition.toString());
-        // if(rightPosition.getValue() == 1.0 && leftPosition.getValue() == 1.0) //hardcode later
-        // {
-        //     "Robot" speed = 0;
-        // }
+        if(leftPosition.getValue() <= 0 && leftPosition.getValue() >= 165)
+        {
+            _climberLeftMotor.stopMotor();
+        }
+        if(rightPosition.getValue() <= 1.0 || rightPosition.getValue() >= 165)
+        {
+            _climberRightMotor.stopMotor();
+        }
     }
 
     @Override

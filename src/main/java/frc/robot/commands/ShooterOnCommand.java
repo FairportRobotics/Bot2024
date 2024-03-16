@@ -45,7 +45,7 @@ public class ShooterOnCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return botVelocity.getValue() >= speed || topVelocity.getValue() >= speed;
+        return botVelocity.getValue() >= speed && topVelocity.getValue() >= speed;
     }
 
     @Override

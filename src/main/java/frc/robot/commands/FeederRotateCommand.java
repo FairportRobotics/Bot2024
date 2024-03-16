@@ -32,10 +32,11 @@ public class FeederRotateCommand extends Command {
 
     @Override
     public void initialize() {
-        feederPos.waitForUpdate(0.1);
-        startingPos = feederPos.getValue();
-        _intakeSubsystem.feederMotor.setControl(posRequest.withPosition(rotations + startingPos));
-        Logger.recordOutput("Feeder Request Pos", rotations + startingPos);
+        //feederPos.waitForUpdate(0.1);
+        _intakeSubsystem.feederMotor.setPosition(0);
+        //startingPos = feederPos.refresh().getValue();
+        _intakeSubsystem.feederMotor.setControl(posRequest.withPosition(rotations));
+        Logger.recordOutput("Feeder Request Pos", rotations);
     }
 
 
@@ -43,18 +44,17 @@ public class FeederRotateCommand extends Command {
     public boolean isFinished() {
         feederPos.refresh();
 
-        Logger.recordOutput("Feeder Error",  Math.abs(feederPos.getValue() - (rotations + startingPos)));
+        Logger.recordOutput("Feeder Error",  Math.abs(feederPos.getValue() - (rotations)));
 
         if (feederPos.hasUpdated()) {
-            return Math.abs(feederPos.getValue() - (rotations + startingPos)) <= 0.1;
+            return Math.abs(feederPos.getValue() - (rotations)) <= 0.1;
         }
 
         return false;
-
     }
 
     @Override
     public void end(boolean interrupted) {
-        _intakeSubsystem.feederMotor.stopMotor();
+        // _intakeSubsystem.feederMotor.stopMotor();
     }
 }
