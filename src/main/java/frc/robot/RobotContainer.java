@@ -43,6 +43,7 @@ import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LightingSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -82,6 +83,7 @@ public class RobotContainer {
   private final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+  public static final LightingSubsystem LIGHTING_SUBSYSTEM = new LightingSubsystem();
 
   public SendableChooser<Command> autoChooser;
 
