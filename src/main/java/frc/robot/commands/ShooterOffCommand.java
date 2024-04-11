@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem;
 
 public class ShooterOffCommand extends Command{
@@ -21,5 +22,10 @@ public class ShooterOffCommand extends Command{
     @Override
     public boolean isFinished() {
         return true;
+    }
+
+    public void end(boolean interrupted)
+    {
+        RobotContainer.noteAquired = false;
     }
 }

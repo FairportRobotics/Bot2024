@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem;
 
 public class ElevatorGoToPosCommand extends Command {
@@ -101,6 +102,7 @@ public class ElevatorGoToPosCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        RobotContainer.noteAquired = false;
         _scoringSubsystem.elevatorLeftMotor.stopMotor();
         _scoringSubsystem.elevatorRightMotor.stopMotor();
         _scoringSubsystem.elevatorLeftMotor.setNeutralMode(NeutralModeValue.Brake);

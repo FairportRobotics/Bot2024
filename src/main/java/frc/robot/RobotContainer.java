@@ -87,6 +87,8 @@ public class RobotContainer {
 
   public SendableChooser<Command> autoChooser;
 
+
+  public static boolean noteAquired = false;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -111,6 +113,7 @@ public class RobotContainer {
       // Do whatever you want with the poses here
       field.getObject("path").setPoses(poses);
     });
+
 
     NamedCommands.registerCommand("ShootCommand", new ShootCommand(scoringSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("IntakeCommand", Commands.sequence(new IntakeNoteToFeederCommand(intakeSubsystem),new WaitCommand(0.2),
@@ -231,7 +234,7 @@ public class RobotContainer {
                                                                                                           // with
                   // negative X
                   // (left)
-                  .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * rotMod * MaxAngularRate); // Drive
+                  .withRotationalRate((driver.getRightX() * Math.abs(driver.getRightX())) * rotMod * MaxAngularRate); // Drive
               // counterclockwise
               // with
               // negative
@@ -245,10 +248,10 @@ public class RobotContainer {
     // reset the field-centric heading
     driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));
 
-    driver.rightBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
+    driver.leftBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
           new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
 
-    driver.y().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
+    driver.rightBumper().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
 
     if (Utils.isSimulation()) {
       drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
