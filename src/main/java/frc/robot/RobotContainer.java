@@ -251,7 +251,7 @@ public class RobotContainer {
     driver.leftBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
           new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
 
-    driver.rightBumper().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
+    driver.leftBumper().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
 
     if (Utils.isSimulation()) {
       drivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
