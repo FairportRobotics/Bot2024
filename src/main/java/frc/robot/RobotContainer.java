@@ -248,7 +248,7 @@ public class RobotContainer {
     // reset the field-centric heading
     driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));
 
-    driver.leftBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
+    driver.rightBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
           new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
 
     driver.leftBumper().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
