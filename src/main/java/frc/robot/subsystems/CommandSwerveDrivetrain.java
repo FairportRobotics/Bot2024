@@ -83,56 +83,62 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void periodic() {
         Subsystem.super.periodic();
 
-        if (DriverStation.isAutonomous()) {
+        Logger.recordOutput("Odemetry Pose", getPose());
 
-            double[] botPoseVals = botPose.getDoubleArray(new double[5]);
+        Logger.recordOutput("SwerveModuleState", this.m_moduleStates);
 
-            if (botPoseVals[0] == 0.0) {
-                return;
-            }
+        double[] botPoseVals = botPose.getDoubleArray(new double[5]);
 
-            // double targetOffsetAngle_Vertical = ty.getDouble(0.0);
-
-            // // how many degrees back is your limelight rotated from perfectly vertical?
-            // double limelightMountAngleDegrees = 15.0;
-
-            // // distance from the center of the Limelight lens to the floor
-            // double limelightLensHeightInches = 24.8;
-
-            // // distance from the target to the floor
-            // double goalHeightInches = 0;
-
-            // long currentID = tid.getInteger(-1);
-
-            // if(currentID == 7 || currentID == 8 || currentID == 3 || currentID == 4)//Speaker tags
-            // {
-            //     goalHeightInches = 53.88;
-            // }
-            // else if(currentID == 5 || currentID == 6)//Amp tags
-            // {
-            //     goalHeightInches = 50.13;
-            // }
-            // else if(currentID == 11 || currentID == 12 || currentID == 13 || currentID == 14 || currentID == 15 || currentID == 16)//Stage tags
-            // {
-            //     goalHeightInches = 48.81;
-            // }
-
-            // double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-            // double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-
-            // // calculate distance
-            // double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)
-            //         / Math.tan(angleToGoalRadians);
-
-            Pose2d pose = new Pose2d(botPoseVals[0], botPoseVals[1], Rotation2d.fromDegrees(botPoseVals[5]));
-            double latency = Timer.getFPGATimestamp() - (botPoseVals[6] / 1000.0);
-            this.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 9999999));
-            //this.addVisionMeasurement(pose, latency);
-
-            Logger.recordOutput("Limelight Pose", pose);
+        if (botPoseVals[0] == 0.0) {
+            return;
         }
 
-        Logger.recordOutput("Odemetry Pose", getPose());
+        // double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+
+        // // how many degrees back is your limelight rotated from perfectly vertical?
+        // double limelightMountAngleDegrees = 15.0;
+
+        // // distance from the center of the Limelight lens to the floor
+        // double limelightLensHeightInches = 24.8;
+
+        // // distance from the target to the floor
+        // double goalHeightInches = 0;
+
+        // long currentID = tid.getInteger(-1);
+
+        // if(currentID == 7 || currentID == 8 || currentID == 3 || currentID ==
+        // 4)//Speaker tags
+        // {
+        // goalHeightInches = 53.88;
+        // }
+        // else if(currentID == 5 || currentID == 6)//Amp tags
+        // {
+        // goalHeightInches = 50.13;
+        // }
+        // else if(currentID == 11 || currentID == 12 || currentID == 13 || currentID ==
+        // 14 || currentID == 15 || currentID == 16)//Stage tags
+        // {
+        // goalHeightInches = 48.81;
+        // }
+
+        // double angleToGoalDegrees = limelightMountAngleDegrees +
+        // targetOffsetAngle_Vertical;
+        // double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+        // // calculate distance
+        // double distanceFromLimelightToGoalInches = (goalHeightInches -
+        // limelightLensHeightInches)
+        // / Math.tan(angleToGoalRadians);
+
+        Pose2d pose = new Pose2d(botPoseVals[0], botPoseVals[1], Rotation2d.fromDegrees(botPoseVals[5]));
+
+        if (DriverStation.isAutonomous()) {
+            double latency = Timer.getFPGATimestamp() - (botPoseVals[6] / 1000.0);
+            this.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 9999999));
+            this.addVisionMeasurement(pose, latency);
+        }
+
+        Logger.recordOutput("Limelight Pose", pose);
     }
 
     private void startSimThread() {

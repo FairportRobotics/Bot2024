@@ -226,15 +226,15 @@ public class RobotContainer {
               double yVelMod = driver.a().getAsBoolean() ? 0.5 : 1;
               double rotMod = driver.a().getAsBoolean() ? 0.5 : 1;
 
-              return drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * xVelMod * MaxSpeed) // Drive
+              return drive.withVelocityX((driver.getLeftY() * Math.abs(driver.getLeftY())) * xVelMod * MaxSpeed) // Drive
                   // forward
                   // with
                   // negative Y (forward)
-                  .withVelocityY(-(driver.getLeftX() * Math.abs(driver.getLeftX())) * yVelMod * MaxSpeed) // Drive left
+                  .withVelocityY((driver.getLeftX() * Math.abs(driver.getLeftX())) * yVelMod * MaxSpeed) // Drive left
                                                                                                           // with
                   // negative X
                   // (left)
-                  .withRotationalRate((driver.getRightX() * Math.abs(driver.getRightX())) * rotMod * MaxAngularRate); // Drive
+                  .withRotationalRate(-(driver.getRightX() * Math.abs(driver.getRightX())) * rotMod * MaxAngularRate); // Drive
               // counterclockwise
               // with
               // negative

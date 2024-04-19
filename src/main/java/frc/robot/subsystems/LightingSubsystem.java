@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
+import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
@@ -19,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightingSubsystem extends SubsystemBase {
 
-    CANdle _CANdle;
+    public static CANdle _CANdle;
     String currentColor = "";
 
     public LightingSubsystem() 
@@ -46,6 +48,14 @@ public class LightingSubsystem extends SubsystemBase {
         _CANdle.animate(animation);
     }
 
+    public void rainbow()
+    {
+        RainbowAnimation animation = new RainbowAnimation();
+        animation.setLedOffset(8);
+        animation.setSpeed(0.5);
+        _CANdle.animate(animation);
+    }
+
     public void larson(){
         LarsonAnimation animation = new LarsonAnimation(255, 0, 0);
         animation.setSpeed(0.01);
@@ -57,5 +67,10 @@ public class LightingSubsystem extends SubsystemBase {
     public void cachow()
     {
         _CANdle.setLEDs(195, 51, 50);
+    }
+
+    public void setClimbColor()
+    {
+        _CANdle.setLEDs(255, 215, 0);
     }
 }

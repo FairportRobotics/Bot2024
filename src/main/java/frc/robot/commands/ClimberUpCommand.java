@@ -6,10 +6,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.LightingSubsystem;
 
 public class ClimberUpCommand extends Command{
 
     ClimberSubsystem _climberSubsystem = new ClimberSubsystem();
+    LightingSubsystem _LightingSubsystem = new LightingSubsystem();
     TalonFX _climberLeftMotor = _climberSubsystem.climberLeftMotor;
     TalonFX _climberRightMotor = _climberSubsystem.climberRightMotor;
     private StatusSignal<Double> leftPosition;
@@ -41,6 +43,11 @@ public class ClimberUpCommand extends Command{
         {
             _climberRightMotor.stopMotor();
         }
+        // if(rightPosition.getValue() > 0.01 || leftPosition.getValue() > 0.01)
+        // {
+        //     LightingSubsystem._CANdle.configBrightnessScalar(rightPosition.getValue());
+        //     _LightingSubsystem.setClimbColor();
+        // }
     }
 
     @Override

@@ -33,8 +33,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         TalonFXConfiguration feederConfig = new TalonFXConfiguration();
-        feederConfig.Slot0.kP = 4;
-        feederConfig.Slot0.kI = 1;
+        feederConfig.Slot0.kP = 6;
+        feederConfig.Slot0.kI = 3;
         feederConfig.Slot0.kD = 0;
         feederMotor.getConfigurator().apply(feederConfig);
         feederPos = feederMotor.getPosition();
