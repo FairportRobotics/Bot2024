@@ -53,14 +53,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (DriverStation.isTeleopEnabled()) {
-            if (!shooterSensor.get() || RobotContainer.noteAquired) {
-                RobotContainer.noteAquired = true;
-                RobotContainer.LIGHTING_SUBSYSTEM.setColor(0, 255, 0, 1.0);
-            } else {
-                RobotContainer.LIGHTING_SUBSYSTEM.setColor(255, 0, 0, 1.0);
-            }
-        }
         // SmartDashboard.putBoolean("FEEDER SENSOR", feederSensor.get());
         SmartDashboard.putBoolean("NOTE ACQUIRED", !shooterSensor.get());
 

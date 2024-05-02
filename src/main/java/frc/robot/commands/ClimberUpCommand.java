@@ -43,11 +43,11 @@ public class ClimberUpCommand extends Command{
         {
             _climberRightMotor.stopMotor();
         }
-        // if(rightPosition.getValue() > 0.01 || leftPosition.getValue() > 0.01)
-        // {
-        //     LightingSubsystem._CANdle.configBrightnessScalar(rightPosition.getValue());
-        //     _LightingSubsystem.setClimbColor();
-        // }
+        if(rightPosition.getValue() > 0.1 || leftPosition.getValue() > 0.1)
+        {
+            LightingSubsystem._CANdle.configBrightnessScalar(rightPosition.getValue());
+            _LightingSubsystem.setClimbColor();
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeNoteToFeederCommand extends Command {
@@ -42,5 +43,6 @@ public class IntakeNoteToFeederCommand extends Command {
         _intakeSubsystem.feederMotor.set(0);
         _intakeSubsystem.intakeLeftMotor.set(0);
         // _intakeSubsystem.intakeRightMotor.set(ControlMode.PercentOutput, -1.0);
+        RobotContainer.LIGHTING_SUBSYSTEM.setColor(0, 255, 0, 1.0);
     }
 }
