@@ -182,7 +182,7 @@ public class RobotContainer {
           new ElevatorGoToPosCommand(scoringSubsystem, 3),
           new FeederRotateCommand(intakeSubsystem, -1),
           new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-          Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 0.75))));
+          Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
 
       operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 

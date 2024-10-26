@@ -72,7 +72,7 @@ public class AutoScoreCommands {
                                 // )),
                                 ),
                                 new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-                                new FeederOnCommand(intakeSubsystem, -1.0),
+                                new FeederOnCommand(intakeSubsystem, -1.5),
                                 new WaitCommand(0.5),
                                 new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 

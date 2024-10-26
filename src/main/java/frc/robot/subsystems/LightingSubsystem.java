@@ -11,8 +11,6 @@ import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
 //import org.apache.commons.lang3.ObjectUtils.Null;
 
-import com.fairportrobotics.frc.poe.controllers.lighting.ArduinoLightingController;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
