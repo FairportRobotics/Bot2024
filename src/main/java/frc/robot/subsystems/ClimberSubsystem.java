@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,6 +18,9 @@ public class ClimberSubsystem extends SubsystemBase {
     public TalonFX climberLeftMotor = new TalonFX(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID);
     public TalonFX climberRightMotor = new TalonFX(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID);
 
+    StatusSignal<Double> leftClimberPos;
+    StatusSignal<Double> rightClimberPos;
+
     public ClimberSubsystem(){
 
         TalonFXConfiguration climberLeftConfig = new TalonFXConfiguration();
@@ -24,13 +30,23 @@ public class ClimberSubsystem extends SubsystemBase {
         climberLeftMotor.getConfigurator().apply(climberLeftConfig);
         climberLeftMotor.setInverted(true);
         climberLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+        leftClimberPos = climberLeftMotor.getPosition();
+        leftClimberPos.setUpdateFrequency(50);
+        rightClimberPos = climberLeftMotor.getPosition();
+        rightClimberPos.setUpdateFrequency(50);
         
         TalonFXConfiguration climberRightConfig = new TalonFXConfiguration();
         climberRightConfig.Slot0.kP = 3;
         climberRightConfig.Slot0.kI = 1;
         climberRightConfig.Slot0.kD = 0.5;
         climberRightMotor.getConfigurator().apply(climberRightConfig);
-        climberRightMotor.setInverted(true);
+        climberRightMotor.setInverted(false);
         climberRightMotor.setNeutralMode(NeutralModeValue.Brake);
+    }
+
+    @Override
+    public void periodic() {
+        Logger.recordOutput("Left Climber Position", leftClimberPos.refresh().getValue());
+        Logger.recordOutput("Right Climber Position", rightClimberPos.refresh().getValue());
     }
 }

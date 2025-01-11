@@ -10,11 +10,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.RobotCentric;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class IntakeSubsystem extends SubsystemBase {
     public TalonFX feederMotor = new TalonFX(Constants.IntakeConstants.FEEDER_MOTOR_ID);
@@ -25,12 +28,13 @@ public class IntakeSubsystem extends SubsystemBase {
     StatusSignal<Double> feederPos;
 
     public TalonFX intakeLeftMotor = new TalonFX(Constants.IntakeConstants.INTAKE_LEFT_MOTOR_ID);
-//    public TalonSRX intakeRightMotor = new TalonSRX(Constants.IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
+    // public TalonSRX intakeRightMotor = new
+    // TalonSRX(Constants.IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
 
-    public IntakeSubsystem(){
+    public IntakeSubsystem() {
         TalonFXConfiguration feederConfig = new TalonFXConfiguration();
-        feederConfig.Slot0.kP = 4;
-        feederConfig.Slot0.kI = 1;
+        feederConfig.Slot0.kP = 6;
+        feederConfig.Slot0.kI = 3;
         feederConfig.Slot0.kD = 0;
         feederMotor.getConfigurator().apply(feederConfig);
         feederPos = feederMotor.getPosition();
@@ -38,7 +42,6 @@ public class IntakeSubsystem extends SubsystemBase {
         feederError = feederMotor.getClosedLoopError();
         feederError.setUpdateFrequency(50);
         feederMotor.optimizeBusUtilization();
-
 
         TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
         intakeConfig.Slot0.kP = 2;
@@ -50,10 +53,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //SmartDashboard.putBoolean("FEEDER SENSOR", feederSensor.get());
+        // SmartDashboard.putBoolean("FEEDER SENSOR", feederSensor.get());
         SmartDashboard.putBoolean("NOTE ACQUIRED", !shooterSensor.get());
 
-        Logger.recordOutput("Feeder Pos", feederPos.refresh().getValue());
+        Logger.recordOutput("Feeder Position", feederPos.refresh().getValue());
         Logger.recordOutput("Note Acquired", !shooterSensor.get());
     }
 

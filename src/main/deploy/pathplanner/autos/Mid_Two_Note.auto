@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4724465259477395,
-      "y": 5.566486534665778
+      "x": 1.3374413054104268,
+      "y": 5.554814720740553
     },
     "rotation": 0
   },
@@ -32,26 +32,20 @@
                 "data": {
                   "name": "IntakeCommand"
                 }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 10.0
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Mid_Speaker"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "ShootCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Mid_Leave"
           }
         }
       ]

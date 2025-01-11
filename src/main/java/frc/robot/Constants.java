@@ -44,7 +44,7 @@ public final class Constants {
     public static final int INTAKE_RIGHT_MOTOR_ID = 23;
 
     public static final int FEEDER_MOTOR_ID = 3;
-    public static final int FEEDER_SENSOR_ID = 9;
+    public static final int FEEDER_SENSOR_ID = 2;
 
     public static final int SHOOTER_SENSOR_ID = 7;
   }
@@ -58,7 +58,7 @@ public final class Constants {
     public static final int ELEVATOR_LEFT_MOTOR_ID = 20;
     public static final int ELEVATOR_RIGHT_MOTOR_ID = 50;
 
-    public static final int ELEVATOR_BOTTOM_SWITCH_ID = 8;
+    public static final int ELEVATOR_BOTTOM_SWITCH_ID = 9;
   }
 
 }

@@ -1,83 +1,74 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.Animation;
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.LarsonAnimation;
+import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
+
 //import org.apache.commons.lang3.ObjectUtils.Null;
 
-import com.fairportrobotics.frc.poe.controllers.lighting.ArduinoLightingController;
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightingSubsystem extends SubsystemBase {
 
-    ArduinoLightingController lightingController;
+    public static CANdle _CANdle;
     String currentColor = "";
 
-    public LightingSubsystem() {
-        try {
-            lightingController = new ArduinoLightingController(9600, Port.kUSB);
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                lightingController = new ArduinoLightingController(9600, Port.kUSB1);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                try {
-                    lightingController = new ArduinoLightingController(9600, Port.kUSB2);
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                    lightingController = null;
-                }
-            }
-        }
+    public LightingSubsystem() 
+    {
+       _CANdle = new CANdle(0);
+       CANdleConfiguration config = new CANdleConfiguration();
+       config.stripType = LEDStripType.BRG;
+       _CANdle.configAllSettings(config);
     }
 
-    // Color rgb values have to be a multiple of 5 otherwise the arduino will never
-    // get the color correct
-    public void setCubeColor() {
-        if (lightingController != null) {
-            this.lightingController.fillAll("155060180");
-            currentColor = "155060180";
-        }
+    public void setColor(int r, int g, int b, double a) 
+    {
+        _CANdle.clearAnimation(0);
+        _CANdle.setLEDs(r, g, b);
+        _CANdle.configBrightnessScalar(a);
     }
 
-    public void setConeColor() {
-        if (lightingController != null) {
-            this.lightingController.fillAll("235185000");
-            currentColor = "235185000";
-        }
+    public void fire()
+    {
+        FireAnimation animation = new FireAnimation();
+        animation.setLedOffset(8);
+        animation.setSpeed(0.1);
+        animation.setSparking(0.1);
+        _CANdle.animate(animation);
     }
 
-    public void setColor(String color) {
-        if (lightingController != null) {
-            this.lightingController.fillAll(color);
-            currentColor = color;
-        }
+    public void rainbow()
+    {
+        RainbowAnimation animation = new RainbowAnimation();
+        animation.setLedOffset(8);
+        animation.setSpeed(0.5);
+        _CANdle.animate(animation);
     }
 
-    public void rainbow() {
-        if (lightingController != null) {
-            this.lightingController.fillRainbow();
-            currentColor = "rainbow";
-        }
+    public void larson(){
+        LarsonAnimation animation = new LarsonAnimation(255, 0, 0);
+        animation.setSpeed(0.01);
+        animation.setNumLed(110);
+        animation.setBounceMode(BounceMode.Center);
+        _CANdle.animate(animation);
     }
 
-    public void shiftWrap() {
-        if (lightingController != null) {
-            this.lightingController.shiftWrap();
-        }
+    public void cachow()
+    {
+        _CANdle.setLEDs(195, 51, 50);
     }
 
-    public String getColor() {
-        return currentColor;
+    public void setClimbColor()
+    {
+        _CANdle.setLEDs(255, 215, 0);
     }
-
-    public ArduinoLightingController getLightingController() {
-        return lightingController;
-    }
-
-    public void off() {
-        if (lightingController != null)
-            this.lightingController.fillAll("000000000");
-    }
-
 }

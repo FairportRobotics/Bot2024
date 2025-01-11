@@ -113,7 +113,7 @@ dependencies {
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
 
     // POE Our library
-    implementation "org.fairportrobotics.poe:potential-octo-eureka-library-java:2024.+"
+    // implementation "org.fairportrobotics.poe:potential-octo-eureka-library-java:2024.+"
 }
 
 test {

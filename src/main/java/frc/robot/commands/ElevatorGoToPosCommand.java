@@ -2,9 +2,11 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem;
 
 public class ElevatorGoToPosCommand extends Command {
@@ -64,6 +66,8 @@ public class ElevatorGoToPosCommand extends Command {
 
     @Override
     public void initialize() {
+        _scoringSubsystem.elevatorLeftMotor.setNeutralMode(NeutralModeValue.Coast);
+        _scoringSubsystem.elevatorRightMotor.setNeutralMode(NeutralModeValue.Coast);
 
         _scoringSubsystem.elevatorLeftMotor
                 .setControl(leftPositionRequest.withPosition(_scoringSubsystem.leftHomePos + requestPosRots));
@@ -98,8 +102,11 @@ public class ElevatorGoToPosCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        RobotContainer.noteAquired = false;
         _scoringSubsystem.elevatorLeftMotor.stopMotor();
         _scoringSubsystem.elevatorRightMotor.stopMotor();
+        _scoringSubsystem.elevatorLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+        _scoringSubsystem.elevatorRightMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
 }

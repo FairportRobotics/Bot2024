@@ -89,15 +89,32 @@ public class ScoringSubsystem extends SubsystemBase {
         shooterBotSpeed.setUpdateFrequency(50);
         shooterBottomMotor.optimizeBusUtilization();
 
-        autoHomeCommand = new ElevatorAutoHomeCommand(this);
-
+        //autoHomeCommand = new ElevatorAutoHomeCommand(this);
     }
 
     @Override
     public void periodic() {
-
         if(leftHomePos == Double.MAX_VALUE || rightHomePos == Double.MAX_VALUE){
-            autoHomeCommand.schedule();
+            
+            this.elevatorLeftMotor.set(-0.1);
+            this.elevatorRightMotor.set(-0.1);
+            
+            if (!this.bottomlimitSwitch.get()) {
+                this.elevatorLeftMotor.set(0.0);
+                this.elevatorRightMotor.set(0.0);
+    
+                StatusSignal<Double> leftPos = elevatorLeftMotor.getPosition();
+                StatusSignal<Double> rightPos = elevatorRightMotor.getPosition();
+
+                leftPos.waitForUpdate(1.0);
+                rightPos.waitForUpdate(1.0);
+        
+                leftHomePos = leftPos.getValue();
+                rightHomePos = rightPos.getValue();
+
+                this.elevatorLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+                this.elevatorRightMotor.setNeutralMode(NeutralModeValue.Brake);
+            }
         }
 
         Logger.recordOutput("Elevator At Bottom", !bottomlimitSwitch.get());

@@ -32,4 +32,9 @@ public class IntakeOnCommand extends Command{
     public boolean isFinished() {
         return true;
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        _IntakeSubsystem.intakeLeftMotor.stopMotor();
+    }
 }

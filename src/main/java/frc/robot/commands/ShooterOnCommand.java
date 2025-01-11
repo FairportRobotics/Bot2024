@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem;
 
 public class ShooterOnCommand extends Command{
@@ -45,7 +46,7 @@ public class ShooterOnCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return botVelocity.getValue() >= speed || topVelocity.getValue() >= speed;
+        return botVelocity.getValue() >= speed && topVelocity.getValue() >= speed;
     }
 
     @Override

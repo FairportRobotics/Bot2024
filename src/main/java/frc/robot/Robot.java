@@ -64,6 +64,7 @@ public class Robot extends LoggedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    RobotContainer.LIGHTING_SUBSYSTEM.fire();
   }
 
   /**
@@ -91,6 +92,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    RobotContainer.LIGHTING_SUBSYSTEM.fire();
   }
 
   @Override
