@@ -7,6 +7,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -19,7 +20,7 @@ public class FeederRotateCommand extends Command {
 
     PositionVoltage posRequest;
 
-    StatusSignal<Double> feederPos;
+    StatusSignal<Angle> feederPos;
 
     public FeederRotateCommand(IntakeSubsystem intakeSubsystem, double rotations) {
         _intakeSubsystem = intakeSubsystem;
@@ -44,10 +45,10 @@ public class FeederRotateCommand extends Command {
     public boolean isFinished() {
         feederPos.refresh();
 
-        Logger.recordOutput("Feeder Error",  Math.abs(feederPos.getValue() - (rotations)));
+        Logger.recordOutput("Feeder Error",  Math.abs(feederPos.getValueAsDouble() - (rotations)));
 
         if (feederPos.hasUpdated()) {
-            return Math.abs(feederPos.getValue() - (rotations)) <= 0.1;
+            return Math.abs(feederPos.getValueAsDouble() - (rotations)) <= 0.1;
         }
 
         return false;

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -12,8 +13,8 @@ public class ClimberDownCommand extends Command{
     ClimberSubsystem _climberSubsystem = new ClimberSubsystem();
     TalonFX _climberLeftMotor = _climberSubsystem.climberLeftMotor;
     TalonFX _climberRightMotor = _climberSubsystem.climberRightMotor;
-    private StatusSignal<Double> leftPosition;
-    private StatusSignal<Double> rightPosition;
+    private StatusSignal<Angle> leftPosition;
+    private StatusSignal<Angle> rightPosition;
     double speed;
 
     public ClimberDownCommand(ClimberSubsystem climberSubsystem, double speed){
@@ -33,11 +34,11 @@ public class ClimberDownCommand extends Command{
     {
         rightPosition = _climberSubsystem.climberLeftMotor.getPosition();
         leftPosition = _climberSubsystem.climberRightMotor.getPosition();
-        if(leftPosition.getValue() <= 0 && leftPosition.getValue() >= 165)
+        if(leftPosition.getValueAsDouble() <= 0 && leftPosition.getValueAsDouble() >= 165)
         {
             _climberLeftMotor.stopMotor();
         }
-        if(rightPosition.getValue() <= 1.0 || rightPosition.getValue() >= 165)
+        if(rightPosition.getValueAsDouble() <= 1.0 || rightPosition.getValueAsDouble() >= 165)
         {
             _climberRightMotor.stopMotor();
         }

@@ -10,6 +10,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,8 +25,8 @@ public class ScoringSubsystem extends SubsystemBase {
 
     public TalonFX shooterTopMotor = new TalonFX(Constants.ShooterContants.SHOOTER_TOP_MOTOR_ID);
 
-    StatusSignal<Double> shooterTopSpeed;
-    StatusSignal<Double> shooterBotSpeed;
+    StatusSignal<AngularVelocity> shooterTopSpeed;
+    StatusSignal<AngularVelocity> shooterBotSpeed;
 
     public TalonFX shooterBottomMotor = new TalonFX(Constants.ShooterContants.SHOOTER_BOTTOM_MOTOR_ID);
 
@@ -33,8 +35,8 @@ public class ScoringSubsystem extends SubsystemBase {
     //DigitalInput toplimitSwitch;
     public DigitalInput bottomlimitSwitch;
 
-    StatusSignal<Double> leftPos;
-    StatusSignal<Double> rightPos;
+    StatusSignal<Angle> leftPos;
+    StatusSignal<Angle> rightPos;
 
     ElevatorAutoHomeCommand autoHomeCommand;
 
@@ -103,14 +105,14 @@ public class ScoringSubsystem extends SubsystemBase {
                 this.elevatorLeftMotor.set(0.0);
                 this.elevatorRightMotor.set(0.0);
     
-                StatusSignal<Double> leftPos = elevatorLeftMotor.getPosition();
-                StatusSignal<Double> rightPos = elevatorRightMotor.getPosition();
+                StatusSignal<Angle> leftPos = elevatorLeftMotor.getPosition();
+                StatusSignal<Angle> rightPos = elevatorRightMotor.getPosition();
 
                 leftPos.waitForUpdate(1.0);
                 rightPos.waitForUpdate(1.0);
         
-                leftHomePos = leftPos.getValue();
-                rightHomePos = rightPos.getValue();
+                leftHomePos = leftPos.getValueAsDouble();
+                rightHomePos = rightPos.getValueAsDouble();
 
                 this.elevatorLeftMotor.setNeutralMode(NeutralModeValue.Brake);
                 this.elevatorRightMotor.setNeutralMode(NeutralModeValue.Brake);

@@ -1,19 +1,4 @@
 {
-  "FMS": {
-    "window": {
-      "visible": false
-    }
-  },
-  "Joysticks": {
-    "window": {
-      "visible": false
-    }
-  },
-  "System Joysticks": {
-    "window": {
-      "visible": false
-    }
-  },
   "keyboardJoysticks": [
     {
       "axisConfig": [
@@ -27,8 +12,8 @@
         },
         {
           "decKey": 69,
-          "decayRate": 0.5,
-          "incKey": 81,
+          "decayRate": 0.0,
+          "incKey": 82,
           "keyRate": 0.009999999776482582
         }
       ],
@@ -106,15 +91,7 @@
   ],
   "robotJoysticks": [
     {
-      "guid": "030000004c050000cc09000011810000",
-      "useGamepad": true
-    },
-    {},
-    {},
-    {},
-    {
-      "useGamepad": true
+      "guid": "Keyboard0"
     }
-  ],
-  "zeroDisconnectedJoysticks": false
+  ]
 }

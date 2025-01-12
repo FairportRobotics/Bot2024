@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -20,8 +21,8 @@ public class ClimberGoToPosCommand extends Command{
 
     private ClimberPos requestPos;
 
-    private StatusSignal<Double> leftClimberPos;
-    private StatusSignal<Double> rightClimberPos;
+    private StatusSignal<Angle> leftClimberPos;
+    private StatusSignal<Angle> rightClimberPos;
 
 
     public ClimberGoToPosCommand(ClimberSubsystem climberSubsystem, ClimberPos climberPos){
@@ -55,11 +56,11 @@ public class ClimberGoToPosCommand extends Command{
     public boolean isFinished() {
         if(requestPos == ClimberPos.kDown)
         {
-            return leftClimberPos.refresh().getValue() <= 0 || rightClimberPos.refresh().getValue() <= 0;
+            return leftClimberPos.refresh().getValueAsDouble() <= 0 || rightClimberPos.refresh().getValueAsDouble() <= 0;
         }
         else if(requestPos == ClimberPos.kUp)
         {
-            return leftClimberPos.refresh().getValue() >= 165 || rightClimberPos.refresh().getValue() >= 165;
+            return leftClimberPos.refresh().getValueAsDouble() >= 165 || rightClimberPos.refresh().getValueAsDouble() >= 165;
         }
         return false;
     }

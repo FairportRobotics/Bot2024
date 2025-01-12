@@ -4,6 +4,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
@@ -20,8 +21,8 @@ public class ElevatorGoToPosCommand extends Command {
     private ScoringSubsystem _scoringSubsystem;
     private double requestPosRots = Double.MAX_VALUE;
 
-    private StatusSignal<Double> leftPosition;
-    private StatusSignal<Double> rightPosition;
+    private StatusSignal<Angle> leftPosition;
+    private StatusSignal<Angle> rightPosition;
 
     private StatusSignal<Double> leftPosError;
     private StatusSignal<Double> rightPosError;
@@ -89,11 +90,11 @@ public class ElevatorGoToPosCommand extends Command {
             return !_scoringSubsystem.bottomlimitSwitch.get();
         } else if (leftPosition.hasUpdated() && rightPosition.hasUpdated()) {
 
-            SmartDashboard.putNumber("Ele Left Pos", leftPosition.getValue());
-            SmartDashboard.putNumber("Ele Right", rightPosition.getValue());
+            SmartDashboard.putNumber("Ele Left Pos", leftPosition.getValueAsDouble());
+            SmartDashboard.putNumber("Ele Right", rightPosition.getValueAsDouble());
 
-            return (Math.abs(leftPosition.getValue() - (requestPosRots + _scoringSubsystem.leftHomePos)) <= 0.1 ||
-                    Math.abs(rightPosition.getValue() - (requestPosRots + _scoringSubsystem.rightHomePos)) <= 0.1);
+            return (Math.abs(leftPosition.getValueAsDouble() - (requestPosRots + _scoringSubsystem.leftHomePos)) <= 0.1 ||
+                    Math.abs(rightPosition.getValueAsDouble() - (requestPosRots + _scoringSubsystem.rightHomePos)) <= 0.1);
         }
 
         return false;

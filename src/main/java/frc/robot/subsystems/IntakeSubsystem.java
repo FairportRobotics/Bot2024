@@ -10,8 +10,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.RobotCentric;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public DigitalInput shooterSensor = new DigitalInput(Constants.IntakeConstants.SHOOTER_SENSOR_ID);
 
     StatusSignal<Double> feederError;
-    StatusSignal<Double> feederPos;
+    StatusSignal<Angle> feederPos;
 
     public TalonFX intakeLeftMotor = new TalonFX(Constants.IntakeConstants.INTAKE_LEFT_MOTOR_ID);
     // public TalonSRX intakeRightMotor = new

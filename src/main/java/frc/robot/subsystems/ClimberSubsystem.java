@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,8 +19,8 @@ public class ClimberSubsystem extends SubsystemBase {
     public TalonFX climberLeftMotor = new TalonFX(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID);
     public TalonFX climberRightMotor = new TalonFX(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID);
 
-    StatusSignal<Double> leftClimberPos;
-    StatusSignal<Double> rightClimberPos;
+    StatusSignal<Angle> leftClimberPos;
+    StatusSignal<Angle> rightClimberPos;
 
     public ClimberSubsystem(){
 

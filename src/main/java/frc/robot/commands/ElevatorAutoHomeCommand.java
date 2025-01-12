@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.StatusSignal;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ScoringSubsystem;
 
@@ -30,14 +31,14 @@ public class ElevatorAutoHomeCommand extends Command{
         _scoringSubsystem.elevatorLeftMotor.set(0.0);
         _scoringSubsystem.elevatorRightMotor.set(0.0);
 
-        StatusSignal<Double> leftPos = _scoringSubsystem.elevatorLeftMotor.getPosition();
-        StatusSignal<Double> rightPos = _scoringSubsystem.elevatorRightMotor.getPosition();
+        StatusSignal<Angle> leftPos = _scoringSubsystem.elevatorLeftMotor.getPosition();
+        StatusSignal<Angle> rightPos = _scoringSubsystem.elevatorRightMotor.getPosition();
 
         leftPos.waitForUpdate(1.0);
         rightPos.waitForUpdate(1.0);
 
-        _scoringSubsystem.leftHomePos = leftPos.getValue();
-        _scoringSubsystem.rightHomePos = rightPos.getValue();
+        _scoringSubsystem.leftHomePos = leftPos.getValueAsDouble();
+        _scoringSubsystem.rightHomePos = rightPos.getValueAsDouble();
     }
 
 }
