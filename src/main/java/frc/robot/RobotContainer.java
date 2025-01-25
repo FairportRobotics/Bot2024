@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,9 +64,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController driver = new CommandXboxController(
-      Constants.OperatorConstants.kDriverControllerPort); // driver
-  // private final CommandXboxController systemCheck = new CommandXboxController(
+  private final PS4Controller driver = new PS4Controller(
+    Constants.OperatorConstants.kDriverControllerPort); // driver
+  
+  // private final CommandXboxController driver = new CommandXboxController(
+  //     Constants.OperatorConstants.kDriverControllerPort); // driver
+  // // private final CommandXboxController systemCheck = new CommandXboxController(
   // Constants.OperatorConstants.kSystemCheckControllerPort); // systemCheck
 
   private final CommandSwerveDrivetrain drivetrainSubsystem = TunerConstants.DriveTrain; // My drivetrain
@@ -145,27 +149,27 @@ public class RobotContainer {
     // if (bindingChooser.getSelected() && !DriverStation.isFMSAttached()) {
     // SYSTEM CHECK BINDINGS
     // here for Scoring subsystem :) change if too low or high
-    if (isDriverOnly) {
+    // if (isDriverOnly) {
      
-    } else {
-      driver.a().onTrue(Commands.sequence(
-          new FeederRotateCommand(intakeSubsystem, 0),
-          new ElevatorGoToPosCommand(scoringSubsystem, 3),
-          new FeederRotateCommand(intakeSubsystem, -1),
-          new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-          Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
+    // } else {
+    //   driver.a().onTrue(Commands.sequence(
+    //       new FeederRotateCommand(intakeSubsystem, 0),
+    //       new ElevatorGoToPosCommand(scoringSubsystem, 3),
+    //       new FeederRotateCommand(intakeSubsystem, -1),
+    //       new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+    //       Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
 
-      driver.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
+    //   driver.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
-      // operator.x().onTrue(commands.intakeRevCommand);
-      // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,
-      // commands.feederOffCommand));
+    //   // operator.x().onTrue(commands.intakeRevCommand);
+    //   // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,
+    //   // commands.feederOffCommand));
 
-      driver.rightBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
-          new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
+    //   driver.rightBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
+    //       new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
 
-      driver.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
-      driver.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
+    //   driver.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
+    //   driver.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
 
       //driver.y().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
 
@@ -173,10 +177,10 @@ public class RobotContainer {
       // -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
       // operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem),
       // new FeederOffCommand(intakeSubsystem)));
-      driver.x()
-          .onTrue(Commands.sequence(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
+      // driver.x()
+      //     .onTrue(Commands.sequence(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
 
-    }
+    // }
 
     // driver.a().onTrue;(commands.autoScoreCommands.scoreAmpCommand);
     // driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
@@ -185,9 +189,9 @@ public class RobotContainer {
         drivetrainSubsystem
             .applyRequest(() -> {
 
-              double xVelMod = driver.leftStick().getAsBoolean() ? 0.5 : 1;
-              double yVelMod = driver.leftStick().getAsBoolean() ? 0.5 : 1;
-              double rotMod = driver.leftStick().getAsBoolean() ? 0.5 : 1;
+              double xVelMod = driver.getL1ButtonPressed() ? 0.5 : 1;
+              double yVelMod = driver.getL1ButtonPressed() ? 0.5 : 1;
+              double rotMod = driver.getL1ButtonPressed() ? 0.5 : 1;
 
               return drive.withVelocityX(-(driver.getLeftY() * Math.abs(driver.getLeftY())) * xVelMod * MaxSpeed) // Drive
                   // forward
@@ -209,7 +213,7 @@ public class RobotContainer {
     // brake));
 
     // reset the field-centric heading
-    driver.start().onTrue(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));
+    //driver.getOptionsButtonPressed().(drivetrainSubsystem.runOnce(() -> drivetrainSubsystem.seedFieldRelative()));
 
     //driver.rightStick().onFalse(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
           //new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
