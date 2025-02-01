@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -18,6 +20,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -138,7 +141,7 @@ public class RobotContainer {
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-          var alliance = DriverStation.getAlliance();
+          Optional<Alliance> alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
             return alliance.get() == DriverStation.Alliance.Red;
           }
