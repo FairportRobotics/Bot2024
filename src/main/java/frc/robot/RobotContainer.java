@@ -26,20 +26,20 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ClimberDownCommand;
-import frc.robot.commands.ClimberGoToPosCommand;
-import frc.robot.commands.ClimberOffCommand;
-import frc.robot.commands.ClimberUpCommand;
+// import frc.robot.commands.ClimberDownCommand;
+// import frc.robot.commands.ClimberGoToPosCommand;
+// import frc.robot.commands.ClimberOffCommand;
+// import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ElevatorGoToPosCommand;
 import frc.robot.commands.FeederOffCommand;
 import frc.robot.commands.FeederOnCommand;
 import frc.robot.commands.FeederRotateCommand;
 import frc.robot.commands.IntakeNoteToFeederCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.ClimberGoToPosCommand.ClimberPos;
+// import frc.robot.commands.ClimberGoToPosCommand.ClimberPos;
 import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.ClimberSubsystem;
+// import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -79,7 +79,7 @@ public class RobotContainer {
 
   private final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+  // private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
   public SendableChooser<Command> autoChooser;
 
@@ -191,16 +191,16 @@ public class RobotContainer {
       // operator.povUp().onTrue(commands.intakeNoteToFeeder);
       // operator.povRight().onTrue(commands.feederRotate);
     } else {
-      operator.a().onTrue(Commands.sequence(
-        new FeederRotateCommand(intakeSubsystem, -1),
-        new ElevatorGoToPosCommand(scoringSubsystem, 2),
-        new FeederRotateCommand(intakeSubsystem, -0.85),
-        new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-        Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
+      // operator.a().onTrue(Commands.sequence(
+        // new FeederRotateCommand(intakeSubsystem, -1),
+        // new ElevatorGoToPosCommand(scoringSubsystem, 2),
+        // new FeederRotateCommand(intakeSubsystem, -0.85),
+        // new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+        // Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
 
       operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
-      // operator.x().onTrue(commands.intakeRevCommand);
+      // operator.x().onTrue(Commands.intakeRevCommand);
       // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,
       // commands.feederOffCommand));
 
@@ -209,23 +209,15 @@ public class RobotContainer {
       operator.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
       operator.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
 
-      operator.leftTrigger().onTrue(new ClimberDownCommand(climberSubsystem, 0.3));
-      operator.leftTrigger().onFalse(new ClimberOffCommand(climberSubsystem));
-
-      operator.rightTrigger().onTrue(new ClimberUpCommand(climberSubsystem, 0.3));
-      operator.rightTrigger().onFalse(new ClimberOffCommand(climberSubsystem));
-
       operator.y().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
 
       //operator.x().onTrue(Commands.parallel(new IntakeOnCommand(intakeSubsystem, -0.5), new FeederOnCommand(intakeSubsystem, -0.5)));
       //operator.x().onFalse(Commands.parallel(new IntakeOffCommand(intakeSubsystem), new FeederOffCommand(intakeSubsystem)));
 
-      operator.povUp().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
-      operator.povDown().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
+      // operator.povUp().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
+      // operator.povDown().onTrue(new ClimberGoToPosCommand(climberSubsystem, ClimberPos.kUp));
     }
 
-    // driver.a().onTrue(commands.autoScoreCommands.scoreAmpCommand);
-    // driver.b().onTrue(commands.autoScoreCommands.scoreSpeakerCommand);
 
     drivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrainSubsystem

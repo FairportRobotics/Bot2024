@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
@@ -16,7 +15,6 @@ import frc.robot.subsystems.ScoringSubsystem;
 public class AutoScoreCommands {
 
         ScoringSubsystem _scoringSubsystem;
-        ClimberSubsystem _climberSubsystem;
         IntakeSubsystem _intakeSubsystem;
         CommandSwerveDrivetrain _commandSwerveDrivetrain;
 
@@ -28,10 +26,10 @@ public class AutoScoreCommands {
 
         public Command scoreAmpCommand;
 
-        public AutoScoreCommands(ScoringSubsystem scoringSubsystem, ClimberSubsystem climberSubsystem,
+        public AutoScoreCommands(ScoringSubsystem scoringSubsystem,
                         IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain commandSwerveDrivetrain) {
                 _scoringSubsystem = scoringSubsystem;
-                _climberSubsystem = climberSubsystem;
+                // _climberSubsystem = climberSubsystem;
                 _intakeSubsystem = intakeSubsystem;
                 _commandSwerveDrivetrain = commandSwerveDrivetrain;
                 _roboSpeakerPose2d = commandSwerveDrivetrain.roboSpeakerPose2d;
