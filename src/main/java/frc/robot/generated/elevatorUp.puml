@@ -1,0 +1,15 @@
+@startuml
+
+participant driver as dr
+participant controller
+participant elevator
+
+dr -> controller: Press A button
+controller -> elevator: Up
+elevator -> motor: drive forward
+
+
+
+
+
+@enduml

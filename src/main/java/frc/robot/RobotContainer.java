@@ -30,7 +30,7 @@ import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberGoToPosCommand;
 import frc.robot.commands.ClimberOffCommand;
 import frc.robot.commands.ClimberUpCommand;
-import frc.robot.commands.ElevatorGoToPosCommand;
+// import frc.robot.commands.ElevatorGoToPosCommand;
 import frc.robot.commands.FeederOffCommand;
 import frc.robot.commands.FeederOnCommand;
 import frc.robot.commands.FeederRotateCommand;
@@ -39,7 +39,7 @@ import frc.robot.commands.IntakeOffCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterOffCommand;
 import frc.robot.commands.ClimberGoToPosCommand.ClimberPos;
-import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
+// import frc.robot.commands.ElevatorGoToPosCommand.ElevatorPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -177,14 +177,14 @@ public class RobotContainer {
     if (isDriverOnly) {
      
     } else {
-      operator.a().onTrue(Commands.sequence(
-          new FeederRotateCommand(intakeSubsystem, 0),
-          new ElevatorGoToPosCommand(scoringSubsystem, 3),
-          new FeederRotateCommand(intakeSubsystem, -1),
-          new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-          Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
+      // operator.a().onTrue(Commands.sequence(
+      //     new FeederRotateCommand(intakeSubsystem, 0),
+      //     new ElevatorGoToPosCommand(scoringSubsystem, 3),
+      //     new FeederRotateCommand(intakeSubsystem, -1),
+      //     new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+      //     Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
 
-      operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
+      // operator.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
       // operator.x().onTrue(commands.intakeRevCommand);
       // operator.x().onFalse(Commands.sequence(commands.intakeOffCommand,

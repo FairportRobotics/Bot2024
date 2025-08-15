@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.ElevatorAutoHomeCommand;
+// import frc.robot.commands.ElevatorAutoHomeCommand;
 
 public class ScoringSubsystem extends SubsystemBase {
 
@@ -36,7 +36,7 @@ public class ScoringSubsystem extends SubsystemBase {
     StatusSignal<Double> leftPos;
     StatusSignal<Double> rightPos;
 
-    ElevatorAutoHomeCommand autoHomeCommand;
+    // ElevatorAutoHomeCommand autoHomeCommand;
 
     public ScoringSubsystem() {
         //toplimitSwitch = new DigitalInput(8);
