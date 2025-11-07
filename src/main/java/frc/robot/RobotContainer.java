@@ -148,12 +148,12 @@ public class RobotContainer {
     if (isDriverOnly) {
      
     } else {
-      driver.a().onTrue(Commands.sequence(
-          new FeederRotateCommand(intakeSubsystem, 0),
-          new ElevatorGoToPosCommand(scoringSubsystem, 3),
-          new FeederRotateCommand(intakeSubsystem, -1),
-          new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
-          Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
+      // driver.a().onTrue(Commands.sequence(
+      //     new FeederRotateCommand(intakeSubsystem, 0),
+      //     new ElevatorGoToPosCommand(scoringSubsystem, 3),
+      //     new FeederRotateCommand(intakeSubsystem, -1),
+      //     new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kAMP),
+      //     Commands.deadline(new WaitCommand(1), new FeederRotateCommand(intakeSubsystem, 1.5))));
 
       driver.b().onTrue(new ElevatorGoToPosCommand(scoringSubsystem, ElevatorPosition.kHome));
 
@@ -163,6 +163,9 @@ public class RobotContainer {
 
       driver.rightBumper().onTrue(Commands.sequence(new ShooterOffCommand(scoringSubsystem),
           new IntakeNoteToFeederCommand(intakeSubsystem), new WaitCommand(0.2), new FeederRotateCommand(intakeSubsystem, -1)));
+
+      driver.a().onTrue(new ShootCommand(scoringSubsystem, intakeSubsystem));
+      // driver.a().onFalse(new ShooterOffCommand(scoringSubsystem));
 
       driver.leftBumper().onTrue(new FeederOnCommand(intakeSubsystem, -0.15));
       driver.leftBumper().onFalse(new FeederOffCommand(intakeSubsystem));
